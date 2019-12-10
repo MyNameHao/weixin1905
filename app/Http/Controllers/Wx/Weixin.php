@@ -3,10 +3,20 @@
 namespace App\Http\Controllers\Wx;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 
 class Weixin extends Controller
 {
+    private $access_token;
+    public function __construct(){
+        $this->access_token=$this->GetAccess_Token();
+    }
+    public function GetAccess_Token(){
+       $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
+        return json_decode($token=file_get_contents($url))->access_token;
+
+    }
     /*
      * 处理接入
      * */
@@ -38,7 +48,7 @@ class Weixin extends Controller
         //入库--其他操作
         if($xml_obj->MsgType=='event'){
             if($xml_obj->Event=='subscribe'){
-                $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
+                $token=$this->access_token;
                 $openid=$xml_obj->FromUserName;
                 $this->GetUserInfo($token,$openid);
             }
@@ -56,7 +66,11 @@ class Weixin extends Controller
         file_put_contents($log_file,$json_srt,FILE_APPEND);
     }
     public function xmltest(){
-            $xml_str = '<xml>
+
+        $aaa=json_decode('{"access_token":"28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD","expires_in":7200}');
+        $bbb=json_decode('{"errcode":42001,"errmsg":"access_token expired hints: [qIEFuSeNRa-pdVBHA!]"}');
+
+        $xml_str = '<xml>
                             <ToUserName><![CDATA[gh_037619b92bc0]]></ToUserName>
                             <FromUserName><![CDATA[oOWCkwpc0xrL17uauyKckwF4qaKI]]></FromUserName>
                             <CreateTime>1575961667</CreateTime>
@@ -65,17 +79,14 @@ class Weixin extends Controller
                             <EventKey><![CDATA[]]></EventKey>
                         </xml>';
         $xml_obj=simplexml_load_string($xml_str);
-        if($xml_obj->MsgType=='event'){
-            if($xml_obj->Event=='subscribe'){
+
                 $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
                 $openid=$xml_obj->FromUserName;
-            }
-        }
-        $this->GetUserInfo($token,$openid);
+
 
         $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid='.$openid.'&lang=zh_CN';
         $json_srt=file_get_contents($url);
-        dd($json_srt);
+        dd(json_decode($json_srt)->errcode);
 
 
     }
