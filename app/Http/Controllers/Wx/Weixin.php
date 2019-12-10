@@ -10,7 +10,7 @@ class Weixin extends Controller
 {
     private $access_token;
     public function __construct(){
-        $this->access_token=$this->GetAccess_Token();
+//        $this->access_token=$this->GetAccess_Token();
     }
     public function GetAccess_Token(){
        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
@@ -58,13 +58,13 @@ class Weixin extends Controller
                 $fromusername=$xml_obj->FromUserName;
                 $createtime=time();
                 $content=date('Y-m-d H:i:s').'  '.$xml_obj->Content;
-               echo  $textinfo='<xml><ToUserName><![CDATA['.$tousername.']]></ToUserName>
-                                <FromUserName><![CDATA['.$fromusername.']]></FromUserName>
+                $textinfo='<xml><ToUserName><![CDATA['.$fromusername.']]></ToUserName>
+                                <FromUserName><![CDATA['.$tousername.']]></FromUserName>
                                 <CreateTime>'.$createtime.'</CreateTime>
                                 <MsgType><![CDATA[text]]></MsgType>
                                 <Content><![CDATA['.$content.']]></Content>
                            </xml>';
-
+            echo $textinfo;
         }
 
 
@@ -96,12 +96,13 @@ class Weixin extends Controller
             $fromusername=$xml_obj->FromUserName;
             $createtime=time();
             $content=date('Y-m-d H:i:s').'  '.$xml_obj->Content;
-            $textinfo='<xml><ToUserName><![CDATA['.$tousername.']]></ToUserName>
-                                <FromUserName><![CDATA['.$fromusername.']]></FromUserName>
-                                <CreateTime>'.$createtime.'</CreateTime>
-                                <MsgType><![CDATA[text]]></MsgType>
-                                <Content><![CDATA['.$content.']]></Content>
-                           </xml>';
+            $textinfo='<xml>
+                              <ToUserName><![CDATA['.$tousername.']]></ToUserName>
+                              <FromUserName><![CDATA['.$fromusername.']]></FromUserName>
+                              <CreateTime>'.$createtime.'</CreateTime>
+                              <MsgType><![CDATA[text]]></MsgType>
+                              <Content><![CDATA['.$content.']]></Content>
+                        </xml>';
             echo $textinfo;
         }
 
