@@ -36,11 +36,9 @@ class Weixin extends Controller
         //处理xml数据
         $xml_obj =simplexml_load_string($xml);
         //入库--其他操作
-        if($xml_obj->Event==subscribe){
             $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
             $openid=$xml_obj->FromUserName;
             $this->GetUserInfo($token,$openid);
-        }
 
 
 
