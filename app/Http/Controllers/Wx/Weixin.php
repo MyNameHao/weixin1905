@@ -36,10 +36,13 @@ class Weixin extends Controller
         //处理xml数据
         $xml_obj =simplexml_load_string($xml);
         //入库--其他操作
-            $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
-            $openid=$xml_obj->FromUserName;
-            $this->GetUserInfo($token,$openid);
-
+        if($xml_obj->MsgType=='event'){
+            if($xml_obj->Event=='subscribe'){
+                $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
+                $openid=$xml_obj->FromUserName;
+                $this->GetUserInfo($token,$openid);
+            }
+        }
 
 
     }
@@ -50,22 +53,31 @@ class Weixin extends Controller
         $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid='.$openid.'&lang=zh_CN';
         $json_srt=file_get_contents($url);
         $log_file='wx_user.log';
-        file_put_contents($log_file,$json_srt,FILE_ADDEND);
+        file_put_contents($log_file,$json_srt,FILE_APPEND);
     }
     public function xmltest(){
             $xml_str = '<xml>
                             <ToUserName><![CDATA[gh_037619b92bc0]]></ToUserName>
                             <FromUserName><![CDATA[oOWCkwpc0xrL17uauyKckwF4qaKI]]></FromUserName>
                             <CreateTime>1575961667</CreateTime>
-                            <MsgType><![CDATA[event]]></MsgType>
+                            <MsgType><![CDATA[text]]></MsgType>
                             <Event><![CDATA[subscribe]]></Event>
                             <EventKey><![CDATA[]]></EventKey>
                         </xml>';
         $xml_obj=simplexml_load_string($xml_str);
-        echo $xml_obj->Event;exit;
-        echo $xml_obj['FromUserName'].'<br>';
-        echo $xml_obj['ToUserName'].'<br>';
-        echo $xml_obj['Content'].'<br>';
+        if($xml_obj->MsgType=='event'){
+            if($xml_obj->Event=='subscribe'){
+                $token='28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD';
+                $openid=$xml_obj->FromUserName;
+            }
+        }
+        $this->GetUserInfo($token,$openid);
+
+        $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid='.$openid.'&lang=zh_CN';
+        $json_srt=file_get_contents($url);
+        dd($json_srt);
+
+
     }
 
 }
