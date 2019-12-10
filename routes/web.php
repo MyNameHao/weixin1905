@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    phpinfo();
+   return view('welcome');
 });
 Route::get('/user', function () {
     echo 111333222;
@@ -28,3 +28,4 @@ Route::get('/fanyi','User\UserController@fanyi');
 //微信
 Route::get('/weixinurl','Wx\Weixin@weixinurl');
 Route::post('/weixinurl','Wx\Weixin@receiv');      //接受微信的推送事件
+//aaa
