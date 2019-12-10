@@ -56,8 +56,8 @@ class Weixin extends Controller
         if($xml_obj->MsgType=='text'){
                 $tousername=$xml_obj->ToUserName;
                 $fromusername=$xml_obj->FromUserName;
-                $createtime=$xml_obj->time();
-                $content=date('Y-m-d H:i:s').'     '.$xml_obj->Content;
+                $createtime=time();
+                $content=date('Y-m-d H:i:s').'  '.$xml_obj->Content;
                 $textinfo='<xml><ToUserName><![CDATA['.$tousername.']]></ToUserName>
                                 <FromUserName><![CDATA['.$fromusername.']]></FromUserName>
                                 <CreateTime>'.$createtime.'</CreateTime>
@@ -95,7 +95,7 @@ class Weixin extends Controller
             $tousername=$xml_obj->ToUserName;
             $fromusername=$xml_obj->FromUserName;
             $createtime=time();
-            $content=date('Y-m-d H:i:s').'     '.$xml_obj->Content;
+            $content=date('Y-m-d H:i:s').'  '.$xml_obj->Content;
             $textinfo='<xml><ToUserName><![CDATA['.$tousername.']]></ToUserName>
                                 <FromUserName><![CDATA['.$fromusername.']]></FromUserName>
                                 <CreateTime>'.$createtime.'</CreateTime>
