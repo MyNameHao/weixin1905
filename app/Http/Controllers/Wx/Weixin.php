@@ -30,8 +30,8 @@ class Weixin extends Controller
 
         //将接收到的数据写入日志
         $loc_file='wx.log';
-        file_get_contents("php://input");
-        $data = date('Y-m-d H:i:s').json_encode($_POST);
+        $xml=file_get_contents("php://input");
+        $data = date('Y-m-d H:i:s').$xml;
         file_put_contents($loc_file,$data,FILE_APPEND);
     }
     /*
