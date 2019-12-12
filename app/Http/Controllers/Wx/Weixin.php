@@ -88,11 +88,11 @@ class Weixin extends Controller
         $createtime=time();
         $json_str=json_decode($json_str,true);
         if($code==1){
-            $content=date('Y-m-d H:i:s',$weixininfo['sub_time']).$json_str['nickname'].$xml_obj->Content;
+            $content=date('Y-m-d H:i:s').$json_str['nickname'].$xml_obj->Content;
         }elseif($code==2){
             $content=date('Y-m-d H:i:s').$json_str['nickname'].'感谢关注';
         }elseif($code==3){
-            $content=date('Y-m-d H:i:s').$json_str['nickname'].'欢迎回来';
+            $content=date('Y-m-d H:i:s',$weixininfo['sub_time']).$json_str['nickname'].'欢迎回来';
         }
 
         $textinfo='<xml><ToUserName><![CDATA['.$fromusername.']]></ToUserName>
