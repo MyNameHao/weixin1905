@@ -66,7 +66,7 @@ class Weixin extends Controller
     }
     public function attention($weixininfo,$json_str,$xml_obj){
         if($weixininfo){
-            $this->respond($xml_obj,3,$json_str);
+            $this->respond($xml_obj,3,$json_str,$weixininfo);
         }else{
             $json_str=json_decode($json_str,true);
             $data=[
@@ -82,13 +82,13 @@ class Weixin extends Controller
     /*
      * 信息自动回复
      * */
-    public function respond($xml_obj,$code,$json_str){
+    public function respond($xml_obj,$code,$json_str,$weixininfo=''){
         $tousername=$xml_obj->ToUserName;
         $fromusername=$xml_obj->FromUserName;
         $createtime=time();
         $json_str=json_decode($json_str,true);
         if($code==1){
-            $content=date('Y-m-d H:i:s').$json_str['nickname'].$xml_obj->Content;
+            $content=date('Y-m-d H:i:s',$weixininfo['sub_time']).$json_str['nickname'].$xml_obj->Content;
         }elseif($code==2){
             $content=date('Y-m-d H:i:s').$json_str['nickname'].'感谢关注';
         }elseif($code==3){
