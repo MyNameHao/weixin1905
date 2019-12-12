@@ -59,11 +59,17 @@ class Weixin extends Controller
         }
         if($xml_obj->MsgType=='text'){
             //收到信息自动回复
+            $token=$this->access_token;
+            $openid=$xml_obj->FromUserName;
+            $json_str=$this->GetUserInfo($token,$openid);
                $this->respond($xml_obj,1,$json_str);
         }
 
 
     }
+    /*
+     *判断用户是否是老用户
+     * */
     public function attention($weixininfo,$json_str,$xml_obj){
         if($weixininfo){
             $this->respond($xml_obj,3,$json_str,$weixininfo);
