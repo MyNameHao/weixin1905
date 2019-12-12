@@ -59,14 +59,14 @@ class Weixin extends Controller
         }
         if($xml_obj->MsgType=='text'){
             //收到信息自动回复
-               $this->respond($xml_obj,1);
+               $this->respond($xml_obj,1,$json_str);
         }
 
 
     }
     public function attention($weixininfo,$json_str,$xml_obj){
         if($weixininfo){
-            $this->respond($xml_obj,3);
+            $this->respond($xml_obj,3,$json_str);
         }else{
             $json_str=json_decode($json_str,true);
             $data=[
@@ -76,22 +76,23 @@ class Weixin extends Controller
                 'nickname'=>$json_str['nickname'],
             ];
             $uid=WeixinUser::insertGetId($data);
-            $this->respond($xml_obj,2);
+            $this->respond($xml_obj,2,$json_str);
         }
     }
     /*
      * 信息自动回复
      * */
-    public function respond($xml_obj,$code){
+    public function respond($xml_obj,$code,$json_str){
         $tousername=$xml_obj->ToUserName;
         $fromusername=$xml_obj->FromUserName;
         $createtime=time();
+        $json_str=json_decode($json_str,true);
         if($code==1){
-            $content=date('Y-m-d H:i:s').'  '.$xml_obj->Content;
+            $content=date('Y-m-d H:i:s').$json_str['nickname'].$xml_obj->Content;
         }elseif($code==2){
-            $content=date('Y-m-d H:i:s').'  '.'感谢关注';
+            $content=date('Y-m-d H:i:s').$json_str['nickname'].'感谢关注';
         }elseif($code==3){
-            $content=date('Y-m-d H:i:s').'  '.'欢迎回来';
+            $content=date('Y-m-d H:i:s').$json_str['nickname'].'欢迎回来';
         }
 
         $textinfo='<xml><ToUserName><![CDATA['.$fromusername.']]></ToUserName>
