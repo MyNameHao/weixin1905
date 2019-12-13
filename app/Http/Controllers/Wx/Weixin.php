@@ -18,7 +18,16 @@ class Weixin extends Controller
     public function GetAccess_Token(){
         $keys='wx_access_token';
         $access_token=Redis::get($keys);
-        if($access_token){
+        $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openidoOWCkwpc0xrL17uauyKckwF4qaKI=&lang=zh_CN';
+        $json=json_decode(file_get_contents($url),true);
+        $aa=array_key_exists('errcode',$json);
+        if($aa){
+            $errcode=true;
+            if($json['errcode']==41001){
+                $errcode=false;
+            }
+        }
+        if($access_token&&$errcode){
             return $access_token;
         }
        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
