@@ -80,7 +80,11 @@ class Weixin extends Controller
             $media_id=$xml_obj->MediaId;
             $imgname='weixin'.date('Y-m-d H:i:s').rand('1000','9999').'.jpeg';
                 $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
-            $aaa=file_put_contents("$imgname",file_get_contents($url));
+            file_put_contents("$imgname",file_get_contents($url));
+            $token=$this->access_token;
+            $openid=$xml_obj->FromUserName;
+            $json_str=$this->GetUserInfo($token,$openid);
+            $this->respond($xml_obj,4,$json_str);
         }
 
 
@@ -117,6 +121,8 @@ class Weixin extends Controller
             $content=date('Y-m-d H:i:s').$json_str['nickname'].'感谢关注';
         }elseif($code==3){
             $content=date('Y-m-d H:i:s',$weixininfo['sub_time']).$json_str['nickname'].'欢迎回来';
+        }elseif($code==4){
+            $content='图片已经接受';
         }
 
         $textinfo='<xml><ToUserName><![CDATA['.$fromusername.']]></ToUserName>
