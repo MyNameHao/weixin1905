@@ -22,10 +22,11 @@ class Weixin extends Controller
             return $access_token;
         }
        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
-        return $access_token=json_decode($token=file_get_contents($url))->access_token;//报错先检查网络是否连接
+        $access_token=json_decode($token=file_get_contents($url))->access_token;
         $keys='wx_access_token';
         Redis::set($keys,$access_token);
         Redis::expire($keys,3600);
+        return $access_token;//报错先检查网络是否连接
 
     }
     /*
@@ -211,7 +212,7 @@ class Weixin extends Controller
             //        echo '<br>';
             //        echo $picurl=$xml_obj->PicUrl;
             //        echo '<br>';
-//                    echo $this->access_token;exit;
+                    echo $this->access_token;exit;
         //第二阶段
         $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token=28_ls7xK117wHaDkn-BmlLtnJsn6YfwndhPiC3KnuTvq0plXUMEst_1AFQXz3T7FLu_g22hbYK_IcihpTB7vsBb-h73dOvkhPtWmeqLXB_CLdG_5-eefLJtI3WU1nQH__7-0jM3ScLjaqslSE-iOEPaAJAVLW&media_id=PBxFlf4TA2_Dyu7qjwNWxaubFBIyFJOakDBWrssmKNf0cCwubHC56YFxbaXMzb5x';
         file_get_contents($url);exit;
