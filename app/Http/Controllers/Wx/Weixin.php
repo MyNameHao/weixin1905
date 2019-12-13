@@ -23,7 +23,7 @@ class Weixin extends Controller
         $aa=array_key_exists('errcode',$json);
         if($aa){
             $errcode=true;
-            if($json['errcode']==41001){
+            if($json['errcode']==40001){
                 $errcode=false;
             }
         }
