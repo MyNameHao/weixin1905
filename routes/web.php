@@ -30,3 +30,4 @@ Route::get('/weixinurl','Wx\Weixin@weixinurl');
 Route::post('/weixinurl','Wx\Weixin@receiv');      //接受微信的推送事件
 Route::get('/xmltest','Wx\Weixin@xmltest');      //接受微信的推送事件
 Route::get('/ceshi','Wx\Weixin@ceshi');      //测试方法
+Route::get('/tupianceshi','Wx\Weixin@tupianceshi');      //图片测试方法

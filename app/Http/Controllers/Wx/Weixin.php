@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Model\WeixinUser;
+use GuzzleHttp\Client;
 
 class Weixin extends Controller
 {
@@ -15,7 +16,7 @@ class Weixin extends Controller
     }
     public function GetAccess_Token(){
        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
-        return json_decode($token=file_get_contents($url))->access_token;
+        return json_decode($token=file_get_contents($url))->access_token;//报错先检查网络是否连接
 
     }
     /*
@@ -63,6 +64,13 @@ class Weixin extends Controller
             $openid=$xml_obj->FromUserName;
             $json_str=$this->GetUserInfo($token,$openid);
                $this->respond($xml_obj,1,$json_str);
+        }
+        if($xml_obj->MsgType=='image'){
+            $token=$this->access_token;
+            $media_id=$xml_obj->MediaId;
+            $imgname='weixin'.date('Y-m-d H:i:s').rand('1000','9999').'.jpeg';
+                $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
+            $aaa=file_put_contents("$imgname",file_get_contents($url));
         }
 
 
@@ -170,5 +178,45 @@ class Weixin extends Controller
         ];
         dd($data);
     }
+    public function tupianceshi(){
+        //第一阶段
+            //    $xml_str='<xml>
+            //                    <ToUserName><![CDATA[gh_037619b92bc0]]></ToUserName>
+            //                    <FromUserName><![CDATA[oOWCkwpc0xrL17uauyKckwF4qaKI]]></FromUserName>
+            //                    <CreateTime>1576146320</CreateTime>
+            //                    <MsgType><![CDATA[image]]></MsgType>
+            //                    <PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz_jpg/5NtdgKzKc79hQ5axHD5aMdQRHib4gicSCiadswH4fIib4jJbrQFAfH4vnHVQAxxHHufKYykJ3pEicEia4VxTPxiaV1UPQ/0]]></PicUrl>
+            //                    <MsgId>22564992125915158</MsgId>
+            //                    <MediaId><![CDATA[PBxFlf4TA2_Dyu7qjwNWxaubFBIyFJOakDBWrssmKNf0cCwubHC56YFxbaXMzb5x]]></MediaId>
+            //                </xml>';
+            //        $xml_obj=simplexml_load_string($xml_str);
+            //        echo $tousername=$xml_obj->ToUserName;
+            //        echo '<br>';
+            //        echo $fromusername=$xml_obj->FromUserName;
+            //        echo '<br>';
+            //        echo $msgtype=$xml_obj->MsgType;
+            //        echo '<br>';
+            //        echo $msgid=$xml_obj->MsgId;
+            //        echo '<br>';
+            //        echo $mediaid=$xml_obj->MediaId;
+            //        echo '<br>';
+            //        echo $picurl=$xml_obj->PicUrl;
+            //        echo '<br>';
+//                    echo $this->access_token;exit;
+        //第二阶段
+        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token=28_ls7xK117wHaDkn-BmlLtnJsn6YfwndhPiC3KnuTvq0plXUMEst_1AFQXz3T7FLu_g22hbYK_IcihpTB7vsBb-h73dOvkhPtWmeqLXB_CLdG_5-eefLJtI3WU1nQH__7-0jM3ScLjaqslSE-iOEPaAJAVLW&media_id=PBxFlf4TA2_Dyu7qjwNWxaubFBIyFJOakDBWrssmKNf0cCwubHC56YFxbaXMzb5x';
+        file_get_contents($url);exit;
+//        $client = new Client();
+//        $aaa=$client->request('GET',$url)->getBody('headers');
+        $aaa=file_put_contents('ddd.jpeg',file_get_contents($url));
+//        echo '下载成功';
+
+
+
+
+
+
+
+}
 
 }
