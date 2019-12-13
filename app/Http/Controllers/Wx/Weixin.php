@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Model\WeixinUser;
 use GuzzleHttp\Client;
 
+
 class Weixin extends Controller
 {
     private $access_token;
@@ -15,8 +16,16 @@ class Weixin extends Controller
         $this->access_token=$this->GetAccess_Token();
     }
     public function GetAccess_Token(){
+        $keys='wx_access_token';
+        $access_token=Redis::get($keys);
+        if($access_token){
+            return $access_token;
+        }
        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4fdcb23b1ce7f2c6&secret=24faac13d7af0aa67ddafc442eded79f';
-        return json_decode($token=file_get_contents($url))->access_token;//报错先检查网络是否连接
+        return $access_token=json_decode($token=file_get_contents($url))->access_token;//报错先检查网络是否连接
+        $keys='wx_access_token';
+        Redis::set($keys,$access_token);
+        Redis::expire($keys,3600);
 
     }
     /*
