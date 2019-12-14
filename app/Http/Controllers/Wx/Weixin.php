@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Model\WeixinUser;
+use App\Model\TextModel;
 use GuzzleHttp\Client;
 
 
@@ -70,6 +71,7 @@ class Weixin extends Controller
 
         //处理xml数据
         $xml_obj =simplexml_load_string($xml);
+
         //入库--其他操作
         if($xml_obj->MsgType=='event'){
             if($xml_obj->Event=='subscribe'){
@@ -81,6 +83,7 @@ class Weixin extends Controller
                 $this->attention($weixininfo,$json_str,$xml_obj);
             }
         }
+
         //收到文字类消息回复并且入库
         if($xml_obj->MsgType=='text'){
             //收到信息自动回复
@@ -88,7 +91,13 @@ class Weixin extends Controller
             $openid=$xml_obj->FromUserName;
             $json_str=$this->GetUserInfo($token,$openid);
                $this->respond($xml_obj,1,$json_str);
+            $textdata=[
+                'openid'=>$openid,
+                'content'=>$xml_obj->Content,
+            ];
+            $tid=TextModel::insertGetId($textdata);
         }
+
         //收到图片类进行消息下载
         if($xml_obj->MsgType=='image'){
             $token=$this->access_token;
@@ -207,7 +216,9 @@ class Weixin extends Controller
         return '.'.$format;
     }
 
-
+    /*
+     * 获取文件夹名称
+     * */
     public function paperfile($xml_obj,$format){
 
 //        $paperfile='paperfile/video/'.date('Ymd').'/';
