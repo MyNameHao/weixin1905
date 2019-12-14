@@ -93,23 +93,15 @@ class Weixin extends Controller
         if($xml_obj->MsgType=='image'){
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
-            //文件夹名称
-            $paperfile='paperfile/image/'.date('Ymd').'/';
-            if(!is_dir($paperfile)){
-                mkdir($paperfile,0777,true);
-            }
-            if(is_dir($paperfile)){
-                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
-                mkdir($paperfile,0777,true);
-            }else{
-                $paperfile='paperfile/image/errorpath/';//备用存放处
-            }
+            //调用方法--获取文件夹名称
+            $paperfile=$this->paperfile($xml_obj,'image');
+
             //调用方法--获取后缀名
            $fromat=$this->fromat($media_id);
             $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
                 $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
             file_put_contents($filename,file_get_contents($url));
-            $openid=$xml_obj->FromUserName;
+                $openid=$xml_obj->FromUserName;
             $json_str=$this->GetUserInfo($token,$openid);
             $this->respond($xml_obj,4,$json_str,'图片已接收在:'.$filename);
         }
@@ -119,16 +111,8 @@ class Weixin extends Controller
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
             //文件夹名称
-            $paperfile='paperfile/voice/'.date('Ymd').'/';
-            if(!is_dir($paperfile)){
-                mkdir($paperfile,0777,true);
-            }
-            if(is_dir($paperfile)){
-                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
-                mkdir($paperfile,0777,true);
-            }else{
-                $paperfile='paperfile/image/errorpath/';//备用存放处
-            }
+            $paperfile=$this->paperfile($xml_obj,'voice');
+
             //调用方法--获取后缀名
             $fromat=$this->fromat($media_id);
             $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
@@ -144,16 +128,8 @@ class Weixin extends Controller
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
             //文件夹名称
-            $paperfile='paperfile/video/'.date('Ymd').'/';
-            if(!is_dir($paperfile)){
-                mkdir($paperfile,0777,true);
-            }
-            if(is_dir($paperfile)){
-                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
-                mkdir($paperfile,0777,true);
-            }else{
-                $paperfile='paperfile/image/errorpath/';//备用存放处
-            }
+            $paperfile=$this->paperfile($xml_obj,'video');
+
             //调用方法--获取后缀名
             $fromat=$this->fromat($media_id);
             $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
@@ -230,6 +206,36 @@ class Weixin extends Controller
         $format=trim(substr($format,strpos($format,'.')+1),'\"');
         return '.'.$format;
     }
+
+
+    public function paperfile($xml_obj,$format){
+
+//        $paperfile='paperfile/video/'.date('Ymd').'/';
+//        if(!is_dir($paperfile)){
+//            mkdir($paperfile,0777,true);
+//        }
+//        if(is_dir($paperfile)){
+//            $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
+//            mkdir($paperfile,0777,true);
+//        }else{
+//            $paperfile='paperfile/image/errorpath/';//备用存放处
+//        }
+
+        $paperfile='paperfile/'.$format.'/'.date('Ymd').'/'.$openid=$xml_obj->FromUserName.'/';
+        if(!is_dir($paperfile)){
+            mkdir($paperfile,0777,true);
+            return $paperfile;
+        }else{
+            return $paperfile;
+        }
+    }
+
+
+
+
+
+
+
 
 
 
