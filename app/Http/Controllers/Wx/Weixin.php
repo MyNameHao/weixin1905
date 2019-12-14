@@ -86,11 +86,15 @@ class Weixin extends Controller
 
         //收到文字类消息回复并且入库
         if($xml_obj->MsgType=='text'){
-            //收到信息自动回复
             $token=$this->access_token;
             $openid=$xml_obj->FromUserName;
+            //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+
+                //调用方法---收到信息自动回复
                $this->respond($xml_obj,1,$json_str);
+
+            //入库操作
             $textdata=[
                 'openid'=>$openid,
                 'content'=>$xml_obj->Content,
@@ -102,16 +106,21 @@ class Weixin extends Controller
         if($xml_obj->MsgType=='image'){
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
+            $openid=$xml_obj->FromUserName;
+
             //调用方法--获取文件夹名称
             $paperfile=$this->paperfile($xml_obj,'image');
 
             //调用方法--获取后缀名
            $fromat=$this->fromat($media_id);
-            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
-                $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
-            file_put_contents($filename,file_get_contents($url));
-                $openid=$xml_obj->FromUserName;
+
+            //调用方法---下载文件
+            $filename=$this->download($paperfile,$fromat,$media_id);
+
+            //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+
+            //调用方法---接收成功向客户发送路径
             $this->respond($xml_obj,4,$json_str,'图片已接收在:'.$filename);
         }
 
@@ -119,16 +128,19 @@ class Weixin extends Controller
         if($xml_obj->MsgType=='voice'){
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
-            //文件夹名称
+            $openid=$xml_obj->FromUserName;
+            //调用方法---文件夹名称
             $paperfile=$this->paperfile($xml_obj,'voice');
 
             //调用方法--获取后缀名
             $fromat=$this->fromat($media_id);
-            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
-            $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
-            file_put_contents($filename,file_get_contents($url));
-            $openid=$xml_obj->FromUserName;
+
+            //调用方法---下载文件
+            $filename=$this->download($paperfile,$fromat,$media_id);
+            //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+
+            //调用方法---接收完成向客户发送路径
             $this->respond($xml_obj,4,$json_str,'语音已接收在:'.$filename);
         }
 
@@ -136,16 +148,21 @@ class Weixin extends Controller
         if($xml_obj->MsgType=='video'){
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
-            //文件夹名称
+            $openid=$xml_obj->FromUserName;
+
+            //调用方法---文件夹名称
             $paperfile=$this->paperfile($xml_obj,'video');
 
             //调用方法--获取后缀名
             $fromat=$this->fromat($media_id);
-            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
-            $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
-            file_put_contents($filename,file_get_contents($url));
-            $openid=$xml_obj->FromUserName;
+
+            //调用方法---下载文件
+            $filename=$this->download($paperfile,$fromat,$media_id);
+
+            //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+
+            //调用方法---接收完成向客户发送路径
             $this->respond($xml_obj,4,$json_str,'视频已接收在:'.$filename);
         }
 
@@ -241,6 +258,15 @@ class Weixin extends Controller
         }
     }
 
+    /*
+     * 下载文件方法
+     * */
+    public function download($paperfile,$fromat,$media_id){
+        $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
+        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->access_token.'&media_id='.$media_id;
+        file_put_contents($filename,file_get_contents($url));
+        return $filename;
+    }
 
 
 
@@ -249,7 +275,9 @@ class Weixin extends Controller
 
 
 
-
+    /*
+     * 以下均是测试代码；
+     * */
 
     public function xmltest(){
 
