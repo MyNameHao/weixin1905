@@ -18,12 +18,12 @@ class Weixin extends Controller
     public function GetAccess_Token(){
         $keys='wx_access_token';
         $access_token=Redis::get($keys);
-        $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openidoOWCkwpc0xrL17uauyKckwF4qaKI=&lang=zh_CN';
+        $url='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid=oOWCkwpc0xrL17uauyKckwF4qaKI=&lang=zh_CN';
         $json=json_decode(file_get_contents($url),true);
         $aa=array_key_exists('errcode',$json);
         if($aa){
             $errcode=true;
-            if($json['errcode']==40001){
+            if($json['errcode']==40001||$json['errcode']==42001){
                 $errcode=false;
             }
         }
@@ -39,7 +39,7 @@ class Weixin extends Controller
 
     }
     /*
-     * 处理接入
+     * 处理接入---绑定token值
      * */
     public function weixinurl(){
         $signature = $_GET["signature"];
@@ -57,6 +57,9 @@ class Weixin extends Controller
             return false;
         }
     }
+    /*
+     * 处理接入---接收推送的数据
+     * */
     public function receiv(){
 
         //将接收到的数据写入日志
@@ -64,6 +67,7 @@ class Weixin extends Controller
         $xml=file_get_contents("php://input");
         $data = date('Y-m-d H:i:s').$xml;
         file_put_contents($loc_file,$data,FILE_APPEND);
+
         //处理xml数据
         $xml_obj =simplexml_load_string($xml);
         //入库--其他操作
@@ -77,6 +81,7 @@ class Weixin extends Controller
                 $this->attention($weixininfo,$json_str,$xml_obj);
             }
         }
+        //收到文字类消息回复并且入库
         if($xml_obj->MsgType=='text'){
             //收到信息自动回复
             $token=$this->access_token;
@@ -84,18 +89,80 @@ class Weixin extends Controller
             $json_str=$this->GetUserInfo($token,$openid);
                $this->respond($xml_obj,1,$json_str);
         }
+        //收到图片类进行消息下载
         if($xml_obj->MsgType=='image'){
             $token=$this->access_token;
             $media_id=$xml_obj->MediaId;
-            $imgname='weixin'.date('Y-m-d H:i:s').rand('1000','9999').'.jpeg';
+            //文件夹名称
+            $paperfile='paperfile/image/'.date('Ymd').'/';
+            if(!is_dir($paperfile)){
+                mkdir($paperfile,0777,true);
+            }
+            if(is_dir($paperfile)){
+                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
+                mkdir($paperfile,0777,true);
+            }else{
+                $paperfile='paperfile/image/errorpath/';//备用存放处
+            }
+            //调用方法--获取后缀名
+           $fromat=$this->fromat($media_id);
+            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
                 $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
-            file_put_contents("$imgname",file_get_contents($url));
-            $token=$this->access_token;
+            file_put_contents($filename,file_get_contents($url));
             $openid=$xml_obj->FromUserName;
             $json_str=$this->GetUserInfo($token,$openid);
-            $this->respond($xml_obj,4,$json_str);
+            $this->respond($xml_obj,4,$json_str,'图片已接收在:'.$filename);
         }
 
+        //收到语音类进行消息下载
+        if($xml_obj->MsgType=='voice'){
+            $token=$this->access_token;
+            $media_id=$xml_obj->MediaId;
+            //文件夹名称
+            $paperfile='paperfile/voice/'.date('Ymd').'/';
+            if(!is_dir($paperfile)){
+                mkdir($paperfile,0777,true);
+            }
+            if(is_dir($paperfile)){
+                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
+                mkdir($paperfile,0777,true);
+            }else{
+                $paperfile='paperfile/image/errorpath/';//备用存放处
+            }
+            //调用方法--获取后缀名
+            $fromat=$this->fromat($media_id);
+            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
+            $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
+            file_put_contents($filename,file_get_contents($url));
+            $openid=$xml_obj->FromUserName;
+            $json_str=$this->GetUserInfo($token,$openid);
+            $this->respond($xml_obj,4,$json_str,'语音已接收在:'.$filename);
+        }
+
+        //收到视频类进行消息下载
+        if($xml_obj->MsgType=='video'){
+            $token=$this->access_token;
+            $media_id=$xml_obj->MediaId;
+            //文件夹名称
+            $paperfile='paperfile/video/'.date('Ymd').'/';
+            if(!is_dir($paperfile)){
+                mkdir($paperfile,0777,true);
+            }
+            if(is_dir($paperfile)){
+                $paperfile=$paperfile.$openid=$xml_obj->FromUserName.'/';
+                mkdir($paperfile,0777,true);
+            }else{
+                $paperfile='paperfile/image/errorpath/';//备用存放处
+            }
+            //调用方法--获取后缀名
+            $fromat=$this->fromat($media_id);
+            $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
+            $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
+            file_put_contents($filename,file_get_contents($url));
+            $openid=$xml_obj->FromUserName;
+            $json_str=$this->GetUserInfo($token,$openid);
+            $this->respond($xml_obj,4,$json_str,'视频已接收在:'.$filename);
+        }
 
     }
     /*
@@ -131,7 +198,7 @@ class Weixin extends Controller
         }elseif($code==3){
             $content=date('Y-m-d H:i:s',$weixininfo['sub_time']).$json_str['nickname'].'欢迎回来';
         }elseif($code==4){
-            $content='图片已经接受';
+            $content=$weixininfo;
         }
 
         $textinfo='<xml><ToUserName><![CDATA['.$fromusername.']]></ToUserName>
@@ -152,6 +219,21 @@ class Weixin extends Controller
         file_put_contents($log_file,$json_srt,FILE_APPEND);
         return $json_srt;
     }
+
+    /*
+     * 获取文件后缀名
+     * */
+    public function fromat($media_id){
+        $client = new Client();
+        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->access_token.'&media_id='.$media_id;
+        $format=$client->request('GET',$url)->getHeader('Content-disposition')[0];
+        $format=trim(substr($format,strpos($format,'.')+1),'\"');
+        return '.'.$format;
+    }
+
+
+
+
     public function xmltest(){
 
 //        $aaa=json_decode('{"access_token":"28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD","expires_in":7200}');
