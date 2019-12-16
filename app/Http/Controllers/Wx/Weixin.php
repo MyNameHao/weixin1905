@@ -259,7 +259,7 @@ class Weixin extends Controller
     }
 
     /*
-     * 下载文件方法
+     * 下载文件
      * */
     public function download($paperfile,$fromat,$media_id){
         $filename=$paperfile.'weixin_'.date('YmdHs').'_'.rand('1000','9999').$fromat;
