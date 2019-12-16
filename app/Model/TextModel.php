@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class TextModel extends Model
 {
     public $primaryKey='tid';
-    public $table='p_text';
+    public $table='p_wx_msg';
 }

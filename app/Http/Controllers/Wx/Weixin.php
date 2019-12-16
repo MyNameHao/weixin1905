@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Model\WeixinUser;
 use App\Model\TextModel;
+use App\Model\ImgModel;
+use App\Model\VoiceModel;
 use GuzzleHttp\Client;
 
 
@@ -91,6 +93,7 @@ class Weixin extends Controller
             //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
 
+            $json_arr=json_decode($json_str,true);
                 //调用方法---收到信息自动回复
                $this->respond($xml_obj,1,$json_str);
 
@@ -98,6 +101,7 @@ class Weixin extends Controller
             $textdata=[
                 'openid'=>$openid,
                 'content'=>$xml_obj->Content,
+                'nickname'=>$json_arr['nickname']
             ];
             $tid=TextModel::insertGetId($textdata);
         }
@@ -119,9 +123,19 @@ class Weixin extends Controller
 
             //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+            $json_arr=json_decode($json_str,true);
+
+            //图片路径入库
+            $imgdata=[
+                'openid'=>$openid,
+                'img'=>$filename,
+                'nickname'=>$json_arr['nickname']
+            ];
+            $tid=ImgModel::insertGetId($imgdata);
 
             //调用方法---接收成功向客户发送路径
             $this->respond($xml_obj,4,$json_str,'图片已接收在:'.$filename);
+
         }
 
         //收到语音类进行消息下载
@@ -139,6 +153,15 @@ class Weixin extends Controller
             $filename=$this->download($paperfile,$fromat,$media_id);
             //调用方法---获取客户信息
             $json_str=$this->GetUserInfo($token,$openid);
+            $json_arr=json_decode($json_str,true);
+
+            //语音路径入库
+            $imgdata=[
+                'openid'=>$openid,
+                'voice'=>$filename,
+                'nickname'=>$json_arr['nickname']
+            ];
+            $tid=VoiceModel::insertGetId($imgdata);
 
             //调用方法---接收完成向客户发送路径
             $this->respond($xml_obj,4,$json_str,'语音已接收在:'.$filename);
@@ -331,6 +354,8 @@ class Weixin extends Controller
         dd($data);
     }
     public function tupianceshi(){
+
+//        echo "<img src='paperfile/image/20191216/oOWCkwoKZDr-hYmGU3Yp06nuJMgI/weixin_201912161907_5304.jpg'>";
         //第一阶段
             //    $xml_str='<xml>
             //                    <ToUserName><![CDATA[gh_037619b92bc0]]></ToUserName>
