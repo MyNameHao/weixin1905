@@ -30,7 +30,8 @@ class WxImgController extends AdminController
         $grid->column('openid', __('Openid'));
         $grid->column('nickname', __('Nickname'));
         $grid->column('img', __('Img'))->display(function($img){
-            return '<img src="http://weixin.1905.img/'.$img.'" height="50" width="50">';
+//            return '<img src="'.env('APP_UPLOAD').$img.'" height="50" width="50">';
+            return '<img src="'.env("APP_UPLOAD").$img.'"height="50" width="50">';
         });
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
