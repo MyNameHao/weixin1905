@@ -93,7 +93,7 @@ class Weixin extends Controller
                         $token=$this->access_token;
                         $openid=$xml_obj->FromUserName;
                         $json_str=$this->GetUserInfo($token,$openid);
-                        $this->respond($xml_obj,4,$json_str,'周一:晴天\n周二:雨天\n周三:多云\n周四:晴天\n周五:晴天\n周六:晴天\n周日:阴天');
+                        $this->respond($xml_obj,4,$json_str,"周一:晴天\n周二:雨天\n周三:多云\n周四:晴天\n周五:晴天\n周六:晴天\n周日:阴天");
                     }
             }
         }
