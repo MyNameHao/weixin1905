@@ -92,7 +92,7 @@ class Weixin extends Controller
                         $json_str=file_get_contents($url);
                         $json_arr=json_decode($json_str,true)['HeWeather6']['0']['now'];
                         $location=json_decode($json_str,true)['HeWeather6']['0']['basic']['location'];
-                        $data='所查城市：'.$location."天气状况：".$json_arr['cond_txt']."\n温度：".$json_arr['tmp']."\n风力：".$json_arr['wind_sc']."级\n风向：".$json_arr['wind_dir']."\n风速：".$json_arr['wind_spd'];
+                        $data='所查城市：'.$location."\n天气状况：".$json_arr['cond_txt']."\n温度：".$json_arr['tmp']."\n风力：".$json_arr['wind_sc']."级\n风向：".$json_arr['wind_dir']."\n风速：".$json_arr['wind_spd'];
 
                         $this->respond($xml_obj,4,$json_str,$data);
                     }elseif($xml_obj->EventKey=='jinjitian'){
