@@ -29,7 +29,10 @@ class WxVoiceController extends AdminController
         $grid->column('v_id', __('V id'));
         $grid->column('openid', __('Openid'));
         $grid->column('nickname', __('Nickname'));
-        $grid->column('voice', __('Voice'));
+        $grid->column('voice', __('Voice'))->display(function($voice){
+           return  '<audio height="50" width="100" preload controls src="'.env("APP_UPLOAD").$voice.'"></audio>';
+//            return '<embed height="50" width="100" src="'.env("APP_UPLOAD").$voice.'">';
+        });
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
