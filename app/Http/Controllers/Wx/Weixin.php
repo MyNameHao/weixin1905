@@ -91,7 +91,8 @@ class Weixin extends Controller
                         $url='https://free-api.heweather.net/s6/weather/now?location=beijing&key=c112fe6655584d8383d2fffd67cabc4a';
                         $json_str=file_get_contents($url);
                         $json_arr=json_decode($json_str,true)['HeWeather6']['0']['now'];
-                        $data="天气状况：".$json_arr['cond_txt']."\n温度：".$json_arr['tmp']."\n风力：".$json_arr['wind_sc']."级\n风向：".$json_arr['wind_dir']."\n风速：".$json_arr['wind_spd'];
+                        $location=json_decode($json_str,true)['HeWeather6']['0']['basic']['location'];
+                        $data='所查城市：'.$location."天气状况：".$json_arr['cond_txt']."\n温度：".$json_arr['tmp']."\n风力：".$json_arr['wind_sc']."级\n风向：".$json_arr['wind_dir']."\n风速：".$json_arr['wind_spd'];
 
                         $this->respond($xml_obj,4,$json_str,$data);
                     }elseif($xml_obj->EventKey=='jinjitian'){
@@ -502,9 +503,9 @@ class Weixin extends Controller
 //        dd($data);
     }
     public function tupianceshi(){
-//        $json_str='';
-//        $json_arr=json_decode($json_str,true);
-//        dd($json_arr['HeWeather6']['0']['now']);
+        $json_str='{"HeWeather6":[{"basic":{"cid":"CN101010100","location":"北京","parent_city":"北京","admin_area":"北京","cnty":"中国","lat":"39.90498734","lon":"116.4052887","tz":"+8.00"},"update":{"loc":"2019-12-17 20:09","utc":"2019-12-17 12:09"},"status":"ok","now":{"cloud":"0","cond_code":"100","cond_txt":"晴","fl":"-4","hum":"27","pcpn":"0.0","pres":"1029","tmp":"1","vis":"16","wind_deg":"3","wind_dir":"北风","wind_sc":"3","wind_spd":"15"}}]}';
+        $json_arr=json_decode($json_str,true);
+        dd($json_arr);
 
 
 
