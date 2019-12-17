@@ -88,7 +88,12 @@ class Weixin extends Controller
                         $token=$this->access_token;
                         $openid=$xml_obj->FromUserName;
                         $json_str=$this->GetUserInfo($token,$openid);
-                        $this->respond($xml_obj,4,$json_str,'晴天');
+                        $url='https://free-api.heweather.net/s6/weather/now?location=beijing&key=c112fe6655584d8383d2fffd67cabc4a';
+                        $json_str=file_get_contents($url);
+                        $json_arr=json_decode($json_str,true)['HeWeather6']['0']['now'];
+                        $data="天气状况：".$json_arr['cond_txt']."\n温度：".$json_arr['tmp']."\n风力：".$json_arr['wind_sc']."级\n风向：".$json_arr['wind_dir']."\n风速：".$json_arr['wind_spd'];
+
+                        $this->respond($xml_obj,4,$json_str,$data);
                     }elseif($xml_obj->EventKey=='jinjitian'){
                         $token=$this->access_token;
                         $openid=$xml_obj->FromUserName;
@@ -359,6 +364,7 @@ class Weixin extends Controller
 
     public function xmltest(){
 
+
 //        $aaa=json_decode('{"access_token":"28_HeReUttBN2jUb2z5fnuVDE3LZPaoDOODx-hOdxf7ERDe8xZ3-DBuS_0-jLMpnF_ZWSw-0CxCuKNX_7n-BLX4NVEW9piJHptn8XPMVUylm5lfuEIEa2HZ3i7UAS0WBYaAFABGD","expires_in":7200}');
 //        $bbb=json_decode('{"errcode":42001,"errmsg":"access_token expired hints: [qIEFuSeNRa-pdVBHA!]"}');
 
@@ -496,6 +502,11 @@ class Weixin extends Controller
 //        dd($data);
     }
     public function tupianceshi(){
+//        $json_str='';
+//        $json_arr=json_decode($json_str,true);
+//        dd($json_arr['HeWeather6']['0']['now']);
+
+
 
 //        echo "<img src='paperfile/image/20191216/oOWCkwoKZDr-hYmGU3Yp06nuJMgI/weixin_201912161907_5304.jpg'>";
         //第一阶段
