@@ -83,6 +83,18 @@ class Weixin extends Controller
                 //查询当前用户是否注册过-----用户关注自动回复
                 $weixininfo=WeixinUser::where('openid',$openid)->first();
                 $this->attention($weixininfo,$json_str,$xml_obj);
+            }elseif($xml_obj->Event=='CLICK'){              //判断点击手册
+                    if($xml_obj->EventKey=='yitian'){
+                        $token=$this->access_token;
+                        $openid=$xml_obj->FromUserName;
+                        $json_str=$this->GetUserInfo($token,$openid);
+                        $this->respond($xml_obj,4,$json_str,'晴天');
+                    }elseif($xml_obj->EventKey=='jinjitian'){
+                        $token=$this->access_token;
+                        $openid=$xml_obj->FromUserName;
+                        $json_str=$this->GetUserInfo($token,$openid);
+                        $this->respond($xml_obj,4,$json_str,'周一:晴天\n周二:雨天\n周三:多云\n周四:晴天\n周五:晴天\n周六:晴天\n周日:阴天');
+                    }
             }
         }
 
@@ -291,6 +303,49 @@ class Weixin extends Controller
         return $filename;
     }
 
+    /*
+     * 创建自定义菜单
+     * */
+    public function createMeun(){
+        $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
+        $meun=[
+            'button'=>
+                [
+                    [
+                        'type'=>'click',
+                        'name'=>'今日天气',
+                        'key'=>'yitian',
+                    ],
+                    [
+                        'type'=>'click',
+                        'name'=>'近日天气',
+                        'key'=>'jinjitian',
+                    ],
+                    [
+                        'name'=>'菜单',
+                        'sub_button'=>[
+                            [
+                                'type'=>'click',
+                                'name'=>'点个赞呗',
+                                'key'=>'dianzan'
+                            ],
+                            [
+                                'type'=>'view',
+                                'name'=>'搜索',
+                                'url'=>'http://www.soso.com/'
+                            ]
+                        ]
+                    ]
+
+                ]
+        ];
+        $json_meun=json_encode($meun,JSON_UNESCAPED_UNICODE);
+        $client=new Client();
+        $aaa=$client->request('POST',$url,[
+            'body'=>$json_meun
+        ]);
+        echo $aaa->getBody();
+    }
 
 
 
@@ -344,14 +399,101 @@ class Weixin extends Controller
 
     }
     public function ceshi(){
-        $json_str=json_decode('{"subscribe":1,"openid":"oOWCkwpc0xrL17uauyKckwF4qaKI","nickname":"ㅤㅤ未成年ㅤㅤ","sex":1,"language":"zh_CN","city":"邯郸","province":"河北","country":"中国","headimgurl":"http:\/\/thirdwx.qlogo.cn\/mmopen\/XM70P5zXcpykDTzCd8tHicXnMib9Q7zGSUrIdXjWzl1KNohkPLFHaUmpx3ndWfoT638pntdPkUcOOk38rIY4UhX3JW0Y7uqoMH\/132","subscribe_time":1576059545,"remark":"","groupid":0,"tagid_list":[],"subscribe_scene":"ADD_SCENE_QR_CODE","qr_scene":0,"qr_scene_str":""}',true);
-        $data=[
-            'openid'=>$json_str['openid'],
-            'sub_time'=>$json_str['subscribe_time'],
-            'sex'=>$json_str['sex'],
-            'nickname'=>$json_str['nickname'],
+        $meun=[
+            'button'=>
+                [
+                    [
+                        'type'=>'click',
+                        'name'=>'一级菜单',
+                        'key'=>'yijicaidan',
+                    ],
+                    [
+                        'name'=>'二级菜单',
+                        'sub_button'=>
+                            [
+                                [
+                                    'type'=>'view',
+                                    'name'=>'搜索',
+                                    'url'=>'http://www.soso.com/'
+                                ],
+                                [
+                                    'type'=>'click',
+                                    'name'=>'点个赞呗',
+                                    'diangezanbei'
+                                ]
+                            ]
+
+                    ]
+                ]
         ];
-        dd($data);
+        echo json_encode($meun);exit;
+        $json_str='{
+     "button":[
+     {
+          "type":"click",
+          "name":"今日歌曲",
+          "key":"V1001_TODAY_MUSIC"
+      },
+      {
+           "name":"菜单",
+           "sub_button":[
+           {
+               "type":"view",
+               "name":"搜索",
+               "url":"http://www.soso.com/"
+            },
+            {
+                 "type":"miniprogram",
+                 "name":"wxa",
+                 "url":"http://mp.weixin.qq.com",
+                 "appid":"wx286b93c14bbf93aa",
+                 "pagepath":"pages/lunar/index"
+             },
+            {
+               "type":"click",
+               "name":"赞一下我们",
+               "key":"V1001_GOOD"
+            }]
+       }]
+ }';
+//        $json_arr=json_decode($json_str,true);
+       dump($json_str);
+        $wx_arr=[
+            'button'=>[
+                [
+                    'type'=>'click',
+                    'name'=>'今日分享',
+                    'key'=>'fenxiang',
+                ],
+                [
+                    'name'=>'菜单',
+                    'sub_button'=>
+                    [
+                        [
+                            'type'=>'click',
+                            'name'=>'今日天气',
+                            'key'=>'tianqi'
+                        ],
+                        [
+                            'type'=>'click',
+                            'name'=>'近期天气',
+                            'key'=>'zuijintianqi'
+                        ],
+
+                    ]
+
+                ]
+            ]
+        ];
+        dd(json_encode($wx_arr));
+//        $json_str=json_decode('{"subscribe":1,"openid":"oOWCkwpc0xrL17uauyKckwF4qaKI","nickname":"ㅤㅤ未成年ㅤㅤ","sex":1,"language":"zh_CN","city":"邯郸","province":"河北","country":"中国","headimgurl":"http:\/\/thirdwx.qlogo.cn\/mmopen\/XM70P5zXcpykDTzCd8tHicXnMib9Q7zGSUrIdXjWzl1KNohkPLFHaUmpx3ndWfoT638pntdPkUcOOk38rIY4UhX3JW0Y7uqoMH\/132","subscribe_time":1576059545,"remark":"","groupid":0,"tagid_list":[],"subscribe_scene":"ADD_SCENE_QR_CODE","qr_scene":0,"qr_scene_str":""}',true);
+//        $data=[
+//            'openid'=>$json_str['openid'],
+//            'sub_time'=>$json_str['subscribe_time'],
+//            'sex'=>$json_str['sex'],
+//            'nickname'=>$json_str['nickname'],
+//        ];
+//        dd($data);
     }
     public function tupianceshi(){
 
