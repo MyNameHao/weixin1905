@@ -43,7 +43,8 @@ class VoteController extends Controller
         foreach($data as $k=>$v){
             echo '投票用户:'.$k.'<br>'.'投票时间:'.$v.'<br>';
         }
-
+        echo '<br>';
+        echo'投票人数'.Redis::zcard($redis_keys);
     }
     /*
      * 根据code获取accesstoken
