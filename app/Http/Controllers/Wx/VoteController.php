@@ -19,16 +19,23 @@ class VoteController extends Controller
         $browse_key='vote';
         $number=Redis::incr($browse_key);
         echo '当前访问量:'.Redis::get($browse_key).'<br>';
-        $redis_key='s:weixin';
         //投票
-        if(!Redis::sismember($redis_key,$userinfo['openid'])){
-            Redis::sadd($redis_key,$userinfo['openid']);
-            echo '恭喜您投票成功'.'<br/>';
-        }else{
+//        $redis_key='s:weixin';
+//        if(!Redis::sismember($redis_key,$userinfo['openid'])){
+//            Redis::sadd($redis_key,$userinfo['openid']);
+//            echo '恭喜您投票成功'.'<br/>';
+//        }else{
+//            echo '您已经投过票了'.'<br/>';
+//        }
+//        $data=Redis::smembers($redis_key);
+//        print_r($data);
+        $redis_keys='ss:weixin';
+        if(Redis::zrank($redis_keys,$userinfo['openid'])){
             echo '您已经投过票了'.'<br/>';
         }
-        $data=Redis::smembers($redis_key);
-        print_r($data);
+        Redis::zadd($redis_keys,time(),$userinfo['openid']);
+        echo '恭喜您投票成功'.'<br/>';
+        $data=Redis::zrange($redis_keys,0,-1,true);
 
     }
     /*
