@@ -314,7 +314,8 @@ class Weixin extends Controller
      * */
     public function createMeun(){
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
-        $meun=[
+        $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
+                            $meun=[
             'button'=>
                 [
                     [
@@ -338,7 +339,7 @@ class Weixin extends Controller
                             [
                                 'type'=>'view',
                                 'name'=>'投票',
-                                'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.urlEncode($url).'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
+                                'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
                             ]
                         ]
                     ]
