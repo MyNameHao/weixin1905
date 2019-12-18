@@ -337,8 +337,8 @@ class Weixin extends Controller
                             ],
                             [
                                 'type'=>'view',
-                                'name'=>'搜索',
-                                'url'=>'http://www.soso.com/'
+                                'name'=>'投票',
+                                'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.urlEncode($url).'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
                             ]
                         ]
                     ]
@@ -353,6 +353,14 @@ class Weixin extends Controller
         echo $aaa->getBody();
     }
 
+    /*
+     * 接受网页回调---code
+     * */
+    public function vote(){
+        $url='http://1905sunhao.comcto.com/vote';
+        $url='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.urlEncode($url).'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect';
+        echo $url;
+    }
 
 
 
@@ -549,5 +557,10 @@ class Weixin extends Controller
 
 
 }
+    public function ceshi2(){
+        echo 'APPID:'.env('APPID')."<br><br>APPSECRE:".env('APPSECRE');
+        echo '<br><br>';
+        echo 'access_token：'.$this->access_token;
+    }
 
 }
