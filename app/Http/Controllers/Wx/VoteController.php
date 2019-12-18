@@ -12,7 +12,7 @@ class VoteController extends Controller
 
         $code=$_GET['code'];
         $data=$this->GetAccessToken($code);
-        $userinfo=$this->GetUserInfo($data['access_token'],$data['poenid']);
+        $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
     }
     /*
      * 根据code获取accesstoken
