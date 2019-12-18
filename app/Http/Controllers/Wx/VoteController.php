@@ -32,13 +32,15 @@ class VoteController extends Controller
         $redis_keys='ss:weixin';
         if(Redis::zrank($redis_keys,$userinfo['openid'])){
             echo '您已经投过票了'.'<br/>';
+        }else{
+            Redis::zadd($redis_keys,time(),$userinfo['openid']);
+            echo '恭喜您投票成功'.'<br/>';
         }
-        Redis::zadd($redis_keys,time(),$userinfo['openid']);
-        echo '恭喜您投票成功'.'<br/>';
         $data=Redis::zrange($redis_keys,0,-1,true);
 //        print_r($data);
+        echo '投票列表';
         foreach($data as $k=>$v){
-            echo '投票用户:'.$k.'投票时间'.$v;
+            echo '投票用户:'.$k."\n投票时间:".$v.'<br>';
         }
 
     }
