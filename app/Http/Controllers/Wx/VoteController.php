@@ -36,9 +36,9 @@ class VoteController extends Controller
         Redis::zadd($redis_keys,time(),$userinfo['openid']);
         echo '恭喜您投票成功'.'<br/>';
         $data=Redis::zrange($redis_keys,0,-1,true);
-        print_r($data);
+//        print_r($data);
         foreach($data as $k=>$v){
-            echo '投票用户:'.$k."\n".'投票时间'.$v.'<br>';
+            echo '投票用户:'.$k.'投票时间'.$v;
         }
 
     }
