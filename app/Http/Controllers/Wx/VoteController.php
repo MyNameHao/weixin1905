@@ -19,7 +19,7 @@ class VoteController extends Controller
         $browse_key='vote';
         $number=Redis::incr($browse_key);
         echo '当前访问量:'.Redis::get($browse_key).'<br>';
-        $redis_key='vote:weixin';
+        $redis_key='s:weixin';
         //投票
         if(!Redis::sismember($redis_key,$userinfo['openid'])){
             Redis::sadd($redis_key,$userinfo['openid']);
