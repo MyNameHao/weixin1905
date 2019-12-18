@@ -37,7 +37,10 @@ class VoteController extends Controller
         echo '恭喜您投票成功'.'<br/>';
         $data=Redis::zrange($redis_keys,0,-1,true);
         print_r($data);
-
+        foreach($data as $k=>$v){
+            echo '投票用户:'.$k."/n".'投票时间'.$v.'<br>';
+        }
+        
     }
     /*
      * 根据code获取accesstoken
