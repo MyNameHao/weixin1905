@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Wx;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class VoteController extends Controller
 {
     public function index(){
-        print_r($_GET);
+//        print_r($_GET);
 
         $code=$_GET['code'];
         $data=$this->GetAccessToken($code);
         $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
+
+        $redis_key='vote';
+        $number=Redis::incr($redis_key);
+        echo Redis::get($redis_key);
     }
     /*
      * 根据code获取accesstoken
@@ -27,7 +32,11 @@ class VoteController extends Controller
      * */
     public function GetUserInfo($token,$openid){
         $url='https://api.weixin.qq.com/sns/userinfo?access_token='.$token.'&openid='.$openid.'&lang=zh_CN';
-        $userinfo=file_get_contents($url);
-        dd($userinfo);
+        $userinfo_json=file_get_contents($url);
+        $userinfo=json_decode($userinfo_json,true);
+        if(isset($userinfo['errcode'])){
+            die('出错了 40001');  //40001表示用户信息获取失败
+        }
+        return $userinfo; //返回用户信息
     }
 }
