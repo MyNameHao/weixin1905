@@ -15,9 +15,21 @@ class VoteController extends Controller
         $data=$this->GetAccessToken($code);
         $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
 
-        $redis_key='vote';
-        $number=Redis::incr($redis_key);
-        echo Redis::get($redis_key);
+        //访问量
+        $browse_key='vote';
+        $number=Redis::incr($browse_key);
+        echo '当前访问量:'.Redis::get($browse_key).'<br>';
+        $redis_key='vote:weixin';
+        //投票
+        if(!Redis::sismember($redis_key,$userinfo['openid'])){
+            Redis::sadd($redis_key,$userinfo['openid']);
+            echo '恭喜您投票成功';
+        }else{
+            echo '您已经投过票了';
+        }
+        $data=Redis::smembers($redis_key);
+        var_dump($data);
+
     }
     /*
      * 根据code获取accesstoken
