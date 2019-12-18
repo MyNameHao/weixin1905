@@ -23,12 +23,12 @@ class VoteController extends Controller
         //投票
         if(!Redis::sismember($redis_key,$userinfo['openid'])){
             Redis::sadd($redis_key,$userinfo['openid']);
-            echo '恭喜您投票成功';
+            echo '恭喜您投票成功'.'<br/>';
         }else{
-            echo '您已经投过票了';
+            echo '您已经投过票了'.'<br/>';
         }
         $data=Redis::smembers($redis_key);
-        var_dump($data);
+        print_r($data);
 
     }
     /*
