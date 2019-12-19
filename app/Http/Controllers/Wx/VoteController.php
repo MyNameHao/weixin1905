@@ -50,7 +50,7 @@ class VoteController extends Controller
         echo'投票人数'.Redis::zcard($redis_keys).'<br>';
         echo '<hr>';
         foreach($data as $k=>$v){
-            echo '<img src="'.Redis::hgetall('H_keys_'.$k,'headimgurl').'">';
+            echo '<img src="'.Redis::hget('H_keys_'.$k,'headimgurl').'">';
         }
     }
     /*
