@@ -59,6 +59,14 @@ class VoteController extends Controller
     protected function GetAccessToken($code){
         $url='https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('APPID').'&secret='.env('APPSECRE').'&code='.$code.'&grant_type=authorization_code';
         $json_arr=json_decode(file_get_contents($url),true);
+        if(isset($json_arr['errcode'])){
+            if($json_arr['errcode']=='40163'){
+                $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
+                $url='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect';
+                $code=file_get_contents($url);
+                echo $code;
+            }
+        }
         return $json_arr;
     }
     /*
