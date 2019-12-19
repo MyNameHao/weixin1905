@@ -35,4 +35,4 @@ Route::get('/tupianceshi','Wx\Weixin@tupianceshi');      //图片测试方法
 Route::get('/createMeun','Wx\Weixin@createMeun');      //更换自定义菜单
 //
 Route::get('/vote','Wx\VoteController@index');      //接收网页回调--code
-Route::get('/votes/{$openid}','Wx\VoteController@votes');      //微信网页展示
+Route::get('/votes/{openid}','Wx\VoteController@votes');      //微信网页展示
