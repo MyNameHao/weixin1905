@@ -119,7 +119,8 @@ class Weixin extends Controller
             $textdata=[
                 'openid'=>$openid,
                 'content'=>$xml_obj->Content,
-                'nickname'=>$json_arr['nickname']
+                'nickname'=>$json_arr['nickname'],
+                'headimgurl'=>$json_arr['headimgurl']
             ];
             $tid=TextModel::insertGetId($textdata);
         }
@@ -315,6 +316,7 @@ class Weixin extends Controller
     public function createMeun(){
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
         $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
+        $urlencode2=urlEncode('http://1905sunhao.comcto.com/code');
                             $meun=[
             'button'=>
                 [
@@ -340,6 +342,11 @@ class Weixin extends Controller
                                 'type'=>'view',
                                 'name'=>'投票',
                                 'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
+                            ],
+                            [
+                                'type'=>'view',
+                                'name'=>'微信商城',
+                                'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode2.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
                             ]
                         ]
                     ]
