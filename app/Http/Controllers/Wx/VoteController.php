@@ -30,6 +30,7 @@ class VoteController extends Controller
 //        }
 //        $data=Redis::smembers($redis_key);
 //        print_r($data);
+        dd(redirect('/votes/'.$userinfo['openid']));
         return redirect('/votes/'.$userinfo['openid']);
     }
     public function votes($openid){
