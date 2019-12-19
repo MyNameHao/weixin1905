@@ -40,13 +40,18 @@ class VoteController extends Controller
         }
         $data=Redis::zrange($redis_keys,0,-1,true);
 //        print_r($data);
-        echo '投票列表'.'<br/>';
+        echo '投票名单'.'<br/>';
 
         foreach($data as $k=>$v){
-            echo '投票用户:'.$k.'<br>'.'投票时间:'.$v.'<br>';
+//            echo '投票用户:'.$k.'<br>'.'投票时间:'.$v.'<br>';
+            echo '投票用户:'.Redis::hget('H_keys_'.$k,'nickname').'<br>';echo '投票时间:'.date('Y-m-d H:i:s',$v).'<br>';
         }
         echo '<br>';
-        echo'投票人数'.Redis::zcard($redis_keys);
+        echo'投票人数'.Redis::zcard($redis_keys).'<br>';
+        echo '<hr>';
+        foreach($data as $k=>$v){
+            echo '<img src="'.Redis::hgetall('H_keys_'.$k,'headimgurl').'">';
+        }
     }
     /*
      * 根据code获取accesstoken
