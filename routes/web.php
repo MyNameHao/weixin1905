@@ -14,6 +14,12 @@
 Route::get('/', function () {
    return view('welcome');
 });
+//商城首页
+Route::get('/code', 'Index\IndexController@code');
+Route::get('/', 'Index\IndexController@index');
+
+
+
 Route::get('/info', function () {
     phpinfo();
 });
