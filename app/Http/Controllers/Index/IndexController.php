@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+//use App\Model\UserModel;
+use App\Model\WeixinUser;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -14,10 +16,11 @@ class IndexController extends Controller
         $data=$this->GetAccessToken($code);
         //获取用户信息
         $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
-       return redirect('/');
+       return redirect('/'.$data['openid']);
     }
-    public function  index(){
-        return view('index.index');
+    public function  index($openid){
+        $data=WeixinUser::where('openid',$openid)->first();
+        return view('index.index',['img'=>$data['headimgurl']]);
     }
     /*
  * 根据code获取accesstoken

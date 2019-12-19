@@ -352,6 +352,8 @@ class Weixin extends Controller
             'body'=>$json_meun
         ]);
         echo $aaa->getBody();
+        print_r($meun);
+
     }
 
     /*
