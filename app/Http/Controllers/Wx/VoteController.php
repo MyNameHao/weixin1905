@@ -20,7 +20,6 @@ class VoteController extends Controller
         //访问量
         $browse_key='vote';
         $number=Redis::incr($browse_key);
-        echo '当前访问量:'.Redis::get($browse_key).'<br>';
         //投票
 //        $redis_key='s:weixin';
 //        if(!Redis::sismember($redis_key,$userinfo['openid'])){
@@ -31,11 +30,16 @@ class VoteController extends Controller
 //        }
 //        $data=Redis::smembers($redis_key);
 //        print_r($data);
+        return redirect('/votes/'.$userinfo['openid']);
+    }
+    public function votes($openid){
+        $browse_key='vote';
+        echo '当前访问量:'.Redis::get($browse_key).'<br>';
         $redis_keys='ss:weixin';
-        if(Redis::zrank($redis_keys,$userinfo['openid'])){
+        if(Redis::zrank($redis_keys,$openid)){
             echo '您已经投过票了'.'<br/>'.'<br/>';
         }else{
-            Redis::zadd($redis_keys,time(),$userinfo['openid']);
+            Redis::zadd($redis_keys,time(),$openid);
             echo '恭喜您投票成功'.'<br/>'.'<br/>';
         }
         $data=Redis::zrange($redis_keys,0,-1,true);
@@ -59,14 +63,6 @@ class VoteController extends Controller
     protected function GetAccessToken($code){
         $url='https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('APPID').'&secret='.env('APPSECRE').'&code='.$code.'&grant_type=authorization_code';
         $json_arr=json_decode(file_get_contents($url),true);
-        if(isset($json_arr['errcode'])){
-            if($json_arr['errcode']=='40163'){
-                $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
-                $url='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect';
-                $code=file_get_contents($url);
-                dd($code);
-            }
-        }
         return $json_arr;
     }
     /*
