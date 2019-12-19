@@ -222,6 +222,7 @@ class Weixin extends Controller
                 'sub_time'=>$json_str['subscribe_time'],
                 'sex'=>$json_str['sex'],
                 'nickname'=>$json_str['nickname'],
+                'headimgurl'=>$json_str['headimgurl']
             ];
             $uid=WeixinUser::insertGetId($data);
             $this->respond($xml_obj,2,$json_str);
