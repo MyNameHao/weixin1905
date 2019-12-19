@@ -64,7 +64,7 @@ class VoteController extends Controller
                 $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
                 $url='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect';
                 $code=file_get_contents($url);
-                echo $code;
+                dd($code);
             }
         }
         return $json_arr;
