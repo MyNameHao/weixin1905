@@ -17,13 +17,13 @@ class IndexController extends Controller
         $data=$this->GetAccessToken($code);
         //获取用户信息
         $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
-       return redirect('/'.$data['openid']);
+       return redirect('/index/'.$data['openid']);
     }
     public function  index($openid){
         $data=WeixinUser::where('openid',$openid)->first();
-        $NewGoods=GoodsModel::where('is_new',1)->limit(4)->get();
-        $HotGoods=GoodsModel::where('is_hot',1)->limit(6)->get();
-        return view('index.index',['img'=>$data['headimgurl'],'newgoods'=>$NewGoods,'hotgoods'=>$HotGoods]);
+        $goodsifo=GoodsModel::get();
+
+        return view('index.index',['img'=>$data['headimgurl'],'goodsinfo'=>$goodsifo]);
     }
     /*
  * 根据code获取accesstoken

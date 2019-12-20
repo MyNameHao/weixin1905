@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 //商城首页
 Route::get('/code', 'Index\IndexController@code');
-Route::get('/{openid}', 'Index\IndexController@index');
+Route::get('/index/{openid}', 'Index\IndexController@index');
 
 
 
@@ -26,7 +26,7 @@ Route::get('/info', function () {
 Route::get('/adduser','User\UserController@adduser');
 Route::get('/deluser','User\UserController@deluser');
 Route::get('/upuser','User\UserController@upuser');
-Route::get('/index','User\UserController@index');
+//Route::get('/index','User\UserController@index');
 Route::get('/redis1','User\UserController@redis1');
 Route::get('/qishou','User\UserController@qishou');
 Route::get('/fanyi','User\UserController@fanyi');
