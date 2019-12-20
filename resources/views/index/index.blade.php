@@ -381,7 +381,8 @@
 <!-- quote -->
 <div class="section quote">
     <div class="container">
-        <h4>FASHION UP TO 50% OFF</h4>
+        {{--<h4>FASHION UP TO 50% OFF</h4>--}}
+        <h4>最高50%折扣</h4>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus illo hic iure eveniet</p>
     </div>
 </div>
@@ -395,28 +396,7 @@
             <div class="divider-top"></div>
             <div class="divider-bottom"></div>
         </div>
-        <div class="row">
-            <div class="col s6">
-                <div class="content">
-                    <img src="img/product-new1.png" alt="">
-                    <h6><a href="">Fashion Men's</a></h6>
-                    <div class="price">
-                        $20 <span>$28</span>
-                    </div>
-                    <button class="btn button-default">ADD TO CART</button>
-                </div>
-            </div>
-            <div class="col s6">
-                <div class="content">
-                    <img src="img/product-new2.png" alt="">
-                    <h6><a href="">Fashion Men's</a></h6>
-                    <div class="price">
-                        $20 <span>$28</span>
-                    </div>
-                    <button class="btn button-default">ADD TO CART</button>
-                </div>
-            </div>
-        </div>
+
         <div class="row margin-bottom">
             <div class="col s6">
                 <div class="content">
@@ -428,16 +408,7 @@
                     <button class="btn button-default">ADD TO CART</button>
                 </div>
             </div>
-            <div class="col s6">
-                <div class="content">
-                    <img src="img/product-new4.png" alt="">
-                    <h6><a href="">Fashion Men's</a></h6>
-                    <div class="price">
-                        $20 <span>$28</span>
-                    </div>
-                    <button class="btn button-default">ADD TO CART</button>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

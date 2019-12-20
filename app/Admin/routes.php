@@ -15,6 +15,6 @@ Route::group([
     $router->resource('wxmsg', WxMsgController::class);
     $router->resource('wxvoice', WxVoiceController::class);
     $router->resource('wximg', WxImgController::class);
-
+    $router->resource('goods', GoodsController::class);
 
 });

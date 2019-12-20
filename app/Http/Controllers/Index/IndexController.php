@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 //use App\Model\UserModel;
+use App\Model\GoodsModel;
 use App\Model\WeixinUser;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,9 @@ class IndexController extends Controller
     }
     public function  index($openid){
         $data=WeixinUser::where('openid',$openid)->first();
-        return view('index.index',['img'=>$data['headimgurl']]);
+        $NewGoods=GoodsModel::where('is_new',1)->limit(4)->get();
+        $HotGoods=GoodsModel::where('is_hot',1)->limit(6)->get();
+        return view('index.index',['img'=>$data['headimgurl'],'newgoods'=>$NewGoods,'hotgoods'=>$HotGoods]);
     }
     /*
  * 根据code获取accesstoken
