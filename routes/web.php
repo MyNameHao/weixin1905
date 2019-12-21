@@ -17,6 +17,9 @@ Route::get('/', function () {
 //商城首页
 Route::get('/code', 'Index\IndexController@code');
 Route::get('/index/{openid}', 'Index\IndexController@index');
+//商城详情页
+Route::get('/detail/{id}', 'Goods\GoodsController@detail');
+
 
 
 
