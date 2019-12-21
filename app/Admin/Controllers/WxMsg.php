@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Redis;
 
 class WxMsg extends AdminController
 {
@@ -21,10 +22,12 @@ class WxMsg extends AdminController
 
 
     public function sendMsg(){
+        $key='wx_access_token';
+        $access_token=Redis::get($key);
         $openid_array=WeixinUser::select('openid')->get()->toarray();
         $openid=array_column($openid_array,'openid');
         $msg=date('Y-m-d H:i:s').'Are you ready';
-        $url='https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_h_w5MxqVeINlO4XwfwjAC6e25hWOEzxROAf9Ch-SjnWSH7DlZCx9XqVrJwZZxClr4g1l7_wTVFwM6eAlC1LFw0H50_NugsauJuIjgkIM-fhcpaxeR5LZSb2-xd5HlXixrEsjJEnq40ty33hZGDEiAFACZA';
+        $url='https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$access_token;
         $data=[
             'touser'=>$openid,
             'msgtype'=>'text',
