@@ -370,9 +370,9 @@ class Weixin extends Controller
      * */
     public function weather(){
         //获取当前天气
-//        $we_url='https://free-api.heweather.net/s6/weather/now?location=beijing&key=c112fe6655584d8383d2fffd67cabc4a';
-//        $data=file_get_contents($we_url);
-        $data='{"HeWeather6":[{"basic":{"cid":"CN101010100","location":"北京","parent_city":"北京","admin_area":"北京","cnty":"中国","lat":"39.90498734","lon":"116.4052887","tz":"+8.00"},"update":{"loc":"2019-12-21 08:56","utc":"2019-12-21 00:56"},"status":"ok","now":{"cloud":"0","cond_code":"100","cond_txt":"晴","fl":"-8","hum":"62","pcpn":"0.0","pres":"1022","tmp":"-5","vis":"16","wind_deg":"172","wind_dir":"南风","wind_sc":"1","wind_spd":"4"}}]} ';
+        $we_url='https://free-api.heweather.net/s6/weather/now?location=beijing&key=c112fe6655584d8383d2fffd67cabc4a';
+        $data=file_get_contents($we_url);
+//        $data='{"HeWeather6":[{"basic":{"cid":"CN101010100","location":"北京","parent_city":"北京","admin_area":"北京","cnty":"中国","lat":"39.90498734","lon":"116.4052887","tz":"+8.00"},"update":{"loc":"2019-12-21 08:56","utc":"2019-12-21 00:56"},"status":"ok","now":{"cloud":"0","cond_code":"100","cond_txt":"晴","fl":"-8","hum":"62","pcpn":"0.0","pres":"1022","tmp":"-5","vis":"16","wind_deg":"172","wind_dir":"南风","wind_sc":"1","wind_spd":"4"}}]} ';
         $json_arr=json_decode($data,true);
         $weather_arr=$json_arr['HeWeather6'][0]['now'];
         $weather="当前天气:".$weather_arr['cond_txt']."\n 温度:".$weather_arr['tmp']."\n风向:".$weather_arr['wind_dir']."\n风力:".$weather_arr['wind_sc']."\n风速:".$weather_arr['wind_spd'];
