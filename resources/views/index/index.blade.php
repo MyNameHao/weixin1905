@@ -401,7 +401,7 @@
             @foreach($goodsinfo as $k=>$v)
             <div class="col s6">
                 <div class="content">
-                    <img src="/storage/{{$v->img}}">
+                    <a href="{{url('detail',$v->goods_id)}}"><img src="/storage/{{$v->img}}"></a>
                     <h6><a href="">Fashion Men's</a></h6>
                     <div class="price">
                         {{--$20 <span>$28</span>--}}
