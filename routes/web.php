@@ -42,3 +42,6 @@ Route::get('/createMeun','Wx\Weixin@createMeun');      //更换自定义菜单
 //
 Route::get('/vote','Wx\VoteController@index');      //接收网页回调--code
 Route::get('/votes/{openid}','Wx\VoteController@votes');      //微信网页展示
+//weather---天气
+Route::get('/weather','Wx\Weixin@weather');
+
