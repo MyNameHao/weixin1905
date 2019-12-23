@@ -39,4 +39,9 @@ class WxMsg extends AdminController
         ]);
         echo $reponse->getBody();
     }
+    public function articles(){
+        $key='wx_access_token';
+        $access_token=Redis::get($key);
+        $url='https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=ACCESS_TOKEN'.$access_token;
+    }
 }

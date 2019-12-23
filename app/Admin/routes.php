@@ -17,5 +17,6 @@ Route::group([
     $router->resource('wxvoice', WxVoiceController::class);
     $router->resource('wximg', WxImgController::class);
     $router->resource('goods', GoodsController::class);
+    $router->resource('mediaimg', MediaImgController::class);
 
 });
