@@ -74,6 +74,7 @@ class MediaImgController extends AdminController
             //新增临时素材
             $media_info = $this->mediaUpload(storage_path('app/public/'.$d->local_path),'image');
             $m = json_decode($media_info,true);
+            dd($m['media_id']);
             $d->where(['id'=>$d->id])->update(['mediaid'=>$m['media_id']]);
         });
 

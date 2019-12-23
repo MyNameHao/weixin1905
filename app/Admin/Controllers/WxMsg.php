@@ -44,4 +44,24 @@ class WxMsg extends AdminController
         $access_token=Redis::get($key);
         $url='https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=ACCESS_TOKEN'.$access_token;
     }
+    //目前无法使用
+    public function mpnews(){
+        $key='wx_access_token';
+        $access_token=Redis::get($key);
+        $openid_array=WeixinUser::select('openid')->get()->toarray();
+        $openid=array_column($openid_array,'openid');
+        $url='https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$access_token;
+        $data=[
+            'touser'=>$openid,
+            'image'=>[
+                'media_id'=>'FCxPkbP17ff8mEtJyUSW3TmMCNaISC4LFD8Mv_nV0-RYa9yu_vrC2bt9mKabvNnA'
+            ],
+            'msgtype'=>'image'
+        ];
+        $client=new Client();
+        $reponse=$client->request('POST',$url,[
+            'body'=>json_encode($data)
+        ]);
+        echo $reponse->getBody();
+    }
 }
