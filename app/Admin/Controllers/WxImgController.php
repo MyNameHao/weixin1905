@@ -68,7 +68,7 @@ class WxImgController extends AdminController
     {
         $form = new Form(new ImgModel);
 
-        $form->text('openid', __('Openid'));
+        $form->text('openid', __('sd'));
         $form->text('nickname', __('Nickname'));
         $form->image('img', __('Img'));
 

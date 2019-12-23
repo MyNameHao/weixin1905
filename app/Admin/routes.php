@@ -11,10 +11,13 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/wxsendmsg', 'WxMsg@sendMsg')->name('admin.home');
+    $router->get('/mpnews', 'WxMsg@mpnews')->name('admin.home');
     $router->resource('users', WxUserController::class);
     $router->resource('wxmsg', WxMsgController::class);
     $router->resource('wxvoice', WxVoiceController::class);
     $router->resource('wximg', WxImgController::class);
-
+    $router->resource('goods', GoodsController::class);
+    $router->resource('mediaimg', MediaImgController::class);
 
 });
