@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    看什么看关注了再看
                 </div>
 
                 <div class="links">
