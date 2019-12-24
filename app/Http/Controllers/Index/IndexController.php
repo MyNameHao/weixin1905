@@ -40,7 +40,7 @@ class IndexController extends Controller
             $data=WeixinUser::where('openid',$openid)->first();
             $img=$data['headimgurl'];
         }else{
-            $img=0;
+            $img=1;
         }
 
         $goodsifo=GoodsModel::get();
