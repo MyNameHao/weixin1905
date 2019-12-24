@@ -106,15 +106,18 @@
         signature: '{{$js_sdk['signature']}}',// 必填，签名
         jsApiList: ['updateAppMessageShareData','chooseImage','updateTimelineShareData'] // 必填，需要使用的JS接口列表
     });
-    wx.ready(function () {      //需在用户可能点击分享按钮前就先调用
-        wx.updateTimelineShareData({
-            title: '微商城已上线', // 分享标题
-            link: 'http://1905sunhao.comcto.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: 'http://1905sunhao.comcto.com/storage/images/微信图片_20191118144643.bmp', // 分享图标
-            success: function () {
-                alert('成功')
-            }
-        })
-    });
+    wx.ready(function(){
+            wx.ready(function () {      //需在用户可能点击分享按钮前就先调用
+                wx.updateTimelineShareData({
+                    title: '微商城已上线', // 分享标题
+                    link: 'http://1905sunhao.comcto.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: 'http://1905sunhao.comcto.com/storage/images/微信图片_20191118144643.bmp', // 分享图标
+                    success: function () {
+                        alert('成功')
+                    }
+                })
+            });
+       });
+
 
 </script>
