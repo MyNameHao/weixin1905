@@ -91,7 +91,6 @@
 
 <!-- scripts -->
 <script src="/js/jquery.min.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script src="/js/materialize.min.js"></script>
 <script src="/js/owl.carousel.min.js"></script>
 <script src="/js/fakeLoader.min.js"></script>
@@ -100,39 +99,3 @@
 
 </body>
 </html>
-<script>
-    wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: 'wx4fdcb23b1ce7f2c6', // 必填，公众号的唯一标识
-        timestamp: '{{$js_sdk['timestamp']}}', // 必填，生成签名的时间戳
-        nonceStr: '{{$js_sdk['nonceStr']}}', // 必填，生成签名的随机串
-        signature: '{{$js_sdk['signature']}}',// 必填，签名
-        jsApiList: ['updateAppMessageShareData','chooseImage','updateTimelineShareData'] // 必填，需要使用的JS接口列表
-    });
-    wx.ready(function(){
-            //分享朋友圈
-            wx.ready(function () {      //需在用户可能点击分享按钮前就先调用
-                wx.updateTimelineShareData({
-                    title: '微商城已上线', // 分享标题
-                    link: 'http://1905sunhao.comcto.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                    imgUrl: 'http://1905sunhao.comcto.com/storage/images/微信图片_20191118144643.bmp', // 分享图标
-                    success: function () {
-                        alert('成功')
-                    }
-                })
-            });
-            wx.onMenuShareAppMessage({
-                title: '微商城已上线', // 分享标题
-                desc: '点击进入', // 分享描述
-                link: 'http://1905sunhao.comcto.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: 'http://1905sunhao.comcto.com/storage/images/微信图片_20191118144643.bmp', // 分享图标
-                type: '', // 分享类型,music、video或link，不填默认为
-                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
-                   alert('分享商城成功')
-                }
-            });
-       });
-
-
-</script>
