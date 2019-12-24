@@ -30,7 +30,7 @@ class IndexController extends Controller
             $uid=WeixinUser::insertGetId($data1);
         }
             cookie('openid',$data['openid']);
-       return redirect('/'.$data['openid']);
+       return redirect('/');
     }
     public function  index(){
         $openid=cookie('openid');
