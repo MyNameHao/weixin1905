@@ -510,8 +510,8 @@
     wx.ready(function(){
         wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
             wx.updateAppMessageShareData({
-                title: '瞧一瞧看一看', // 分享标题
-                desc: '元旦促销', // 分享描述
+                title: '微商城已上线', // 分享标题
+                desc: '商城分享测试', // 分享描述
                 link: 'http://1905sunhao.comcto.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: 'http://1905sunhao.comcto.com/storage/images/微信图片_20191118144643.bmp', // 分享图标
                 success: function () {
