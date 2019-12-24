@@ -18,13 +18,32 @@ class IndexController extends Controller
         $data=$this->GetAccessToken($code);
         //获取用户信息
         $userinfo=$this->GetUserInfo($data['access_token'],$data['openid']);
-       return redirect('/index/'.$data['openid']);
+
+        if(!$userinfo){
+            $data1=[
+                'openid'=>$data['openid'],
+                'sub_time'=>$data['subscribe_time'],
+                'sex'=>$data['sex'],
+                'nickname'=>$data['nickname'],
+                'headimgurl'=>$data['headimgurl']
+            ];
+            $uid=WeixinUser::insertGetId($data1);
+        }
+            cookie('openid',$data['openid']);
+       return redirect('/'.$data['openid']);
     }
-    public function  index($openid){
-        $data=WeixinUser::where('openid',$openid)->first();
+    public function  index(){
+        $openid=cookie('openid');
+        if($openid){
+            $data=WeixinUser::where('openid',$openid)->first();
+            $img=$data['headimgurl'];
+        }else{
+            $img=0;
+        }
+
         $goodsifo=GoodsModel::get();
         $js_sdk=$this->jssdk();
-        return view('index.index',['img'=>$data['headimgurl'],'goodsinfo'=>$goodsifo,'js_sdk'=>$js_sdk]);
+        return view('index.index',['img'=>$img,'goodsinfo'=>$goodsifo,'js_sdk'=>$js_sdk]);
     }
     /*
  * 根据code获取accesstoken

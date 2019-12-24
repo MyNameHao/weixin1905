@@ -32,8 +32,11 @@
     </div>
     <!-- end site brand	 -->
     <div class="side-nav-panel-right">
-        {{--<a href="#" data-activates="slide-out-right" class="side-nav-left"><i class="fa fa-user"></i></a>--}}
+        @if($img==0)
+        <a href="#" data-activates="slide-out-right" class="side-nav-left"><i class="fa fa-user"></i></a>
+        @else
         <img src="{{$img}}" alt="">
+        @endif
     </div>
 </div>
 <!-- end navbar top -->

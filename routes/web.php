@@ -11,12 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-   return view('welcome');
-});
+//Route::get('/', function () {
+//   return view('welcome');
+//});
 //商城首页
 Route::get('/code', 'Index\IndexController@code');
-Route::get('/index/{openid}', 'Index\IndexController@index');
+Route::get('/', 'Index\IndexController@index');
 //商城详情页
 Route::get('/detail/{id}', 'Goods\GoodsController@detail');
 
