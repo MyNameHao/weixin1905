@@ -52,7 +52,9 @@ class IndexController extends Controller
         $nonceStr=Str::random(8);
         $timestamp=time();
         $url='https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html';
-        $string1='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$nonceStr.'&timestamp='.$timestamp.'&url='.$url;
+//        $string1 = "jsapi_ticket={$ticket}&noncestr={$param['nonceStr']}&timestamp={$param['timestamp']}&url=".$url;
+//        $string1='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$nonceStr.'&timestamp='.$timestamp.'&url='.$url;
+        $string1="jsapi_ticket={$jsapi_ticket}&noncestr={$nonceStr}&timestamp={$timestamp}&url=".$url;
         $signature=sha1($string1);
         $data=[
             'timestamp'=>$timestamp,
