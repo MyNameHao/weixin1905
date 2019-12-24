@@ -8,6 +8,7 @@ use App\Model\GoodsModel;
 use App\Model\WeixinUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cookie;
 
 class IndexController extends Controller
 {
@@ -29,11 +30,12 @@ class IndexController extends Controller
             ];
             $uid=WeixinUser::insertGetId($data1);
         }
-            cookie('openid',$data['openid']);
+            Cookie::queue('openid',$data['openid']);
        return redirect('/');
     }
     public function  index(){
-        $openid=cookie('openid');
+//        $openid=cookie('openid');
+        $openid=Cookie::get('openid');
         if($openid){
             $data=WeixinUser::where('openid',$openid)->first();
             $img=$data['headimgurl'];
