@@ -32,7 +32,7 @@
     </div>
     <!-- end site brand	 -->
     <div class="side-nav-panel-right">
-        @if($img==0)
+        @if($img==1)
         <a href="#" data-activates="slide-out-right" class="side-nav-left"><i class="fa fa-user"></i></a>
         @else
         <img src="{{$img}}" alt="">
