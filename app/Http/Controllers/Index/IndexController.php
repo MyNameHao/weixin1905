@@ -54,7 +54,6 @@ class IndexController extends Controller
         $url='https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html';
         $string1='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$nonceStr.'&timestamp='.$timestamp.'&url='.$url;
         $signature=sha1($string1);
-        dd($signature);
         $data=[
             'timestamp'=>$timestamp,
             'nonceStr'=>$nonceStr,
