@@ -32,4 +32,19 @@ class WeixinUser extends Model
         return $access_token;//报错先检查网络是否连接
 
     }
+    static public function jsapi_ticket(){
+        $key='wx_jsapi_ticket';
+        $js_sdk=Redis::get($key);
+        if($js_sdk){
+            return $js_sdk;
+        }
+        $access_token=WeixinUser::GetAccess_Token();
+        $url='https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
+        $json_jssdk=file_get_contents($url);
+        $js_sdk=json_decode($json_jssdk,true)['ticket'];
+        Redis::set($key,$js_sdk);
+        Redis::expire($key,3600);
+        return $js_sdk;
+
+    }
 }

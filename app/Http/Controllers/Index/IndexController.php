@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\GoodsModel;
 use App\Model\WeixinUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class IndexController extends Controller
 {
@@ -22,8 +23,8 @@ class IndexController extends Controller
     public function  index($openid){
         $data=WeixinUser::where('openid',$openid)->first();
         $goodsifo=GoodsModel::get();
-
-        return view('index.index',['img'=>$data['headimgurl'],'goodsinfo'=>$goodsifo]);
+        $js_sdk=$this->jssdk();
+        return view('index.index',['img'=>$data['headimgurl'],'goodsinfo'=>$goodsifo,'js_sdk'=>$js_sdk]);
     }
     /*
  * 根据code获取accesstoken
@@ -44,5 +45,21 @@ class IndexController extends Controller
             die('出错了 40001');  //40001表示用户信息获取失败
         }
         return $userinfo; //返回用户信息
+    }
+    public function jssdk(){
+        $jsapi_ticket=WeixinUser::jsapi_ticket();
+//        $signature = "";
+        $nonceStr=Str::random(8);
+        $timestamp=time();
+        $url='https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html';
+        $string1='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$nonceStr.'&timestamp='.$timestamp.'&url='.$url;
+        $signature=sha1($string1);
+        dd($signature);
+        $data=[
+            'timestamp'=>$timestamp,
+            'nonceStr'=>$nonceStr,
+            'signature'=>$signature,
+        ];
+        return $data;
     }
 }
