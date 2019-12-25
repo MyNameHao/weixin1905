@@ -120,7 +120,6 @@ class Weixin extends Controller
                 'openid'=>$openid,
                 'content'=>$xml_obj->Content,
                 'nickname'=>$json_arr['nickname'],
-                'headimgurl'=>$json_arr['headimgurl']
             ];
             $tid=TextModel::insertGetId($textdata);
         }
