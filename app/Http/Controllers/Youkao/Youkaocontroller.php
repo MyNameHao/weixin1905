@@ -132,7 +132,7 @@ class Youkaocontroller extends Controller
         $array_token=json_decode(file_get_contents($url),true);
 //        $access_token=$array_token['access_token'];
         $openid=$array_token['openid'];
-        return ('/glkc2/'.$openid);
+        return redirect('/glkc2/'.$openid);
     }
     public function glkc2($openid){
         $courseinfo=UserCourse::where('openid',$openid)->first();
