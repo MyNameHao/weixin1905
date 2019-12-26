@@ -149,6 +149,8 @@ class Youkaocontroller extends Controller
     public function create(){
         $data=request()->all();
         $id=UserCourse::insertGetId($data);
+        $courseinfo=UserCourse::where('a_id',$id)->first();
+        return redirect('/course/index/'.$courseinfo['openid']);
     }
     public function index($openid){
         $courseinfo=UserCourse::where('openid',$openid)->first();
@@ -163,5 +165,7 @@ class Youkaocontroller extends Controller
     public function updo($openid){
         $data=request()->all();
             $res=UserCourse::where(['openid'=>$openid])->update($data);
+             return redirect('/course/index/'.$openid);
+
     }
 }
