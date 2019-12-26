@@ -130,7 +130,7 @@ class Youkaocontroller extends Controller
        $code=$_GET['code'];
         $url='https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('APPID').'&secret='.env('APPSECRE').'&code='.$code.'&grant_type=authorization_code';
         $array_token=json_encode(file_get_contents($url),true);
-        $access_token=$array_token['access_token'];
+//        $access_token=$array_token['access_token'];
         $openid=$array_token['openid'];
         return ('/glkc2/'.$openid);
     }
