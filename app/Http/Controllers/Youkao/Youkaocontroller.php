@@ -27,6 +27,7 @@ class Youkaocontroller extends Controller
     }
     public function weixinurl(){
         $xml=file_get_contents("php://input");
+        file_put_contents('wx.log',$xml,FILE_APPEND);
         $xml_obj=simplexml_load_string($xml);
         $openid=$xml_obj->FromUserName;
         if($xml_obj->MsgType=='event'){
@@ -38,7 +39,7 @@ class Youkaocontroller extends Controller
                             <FromUserName><![CDATA['.$xml_obj->TouserName.']]></FromUserName>
                             <CreateTime>'.time().'</CreateTime>
                             <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[欢迎xx同学进入选课系统]]></Content>
+                            <Content><![CDATA[欢迎'.$userinfo->nickname.'同学进入选课系统]]></Content>
                           </xml>';
                     echo $xmltext;
                 }else{
@@ -56,7 +57,7 @@ class Youkaocontroller extends Controller
                             <FromUserName><![CDATA['.$xml_obj->TouserName.']]></FromUserName>
                             <CreateTime>'.time().'</CreateTime>
                             <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[欢迎xx同学进入选课系统]]></Content>
+                            <Content><![CDATA[欢迎'.$userinfo['nickname'].'同学进入选课系统]]></Content>
                           </xml>';
                     echo $xmltext;
                 }
