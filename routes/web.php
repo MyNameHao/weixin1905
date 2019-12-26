@@ -59,5 +59,7 @@ Route::get('/festival','test\TestController@festival');      //节日主页
 //月考
 Route::post('/weixinurl','Youkao\Youkaocontroller@weixinurl');      //接受微信推送事件
 Route::get('/ceshi1','Youkao\Youkaocontroller@ceshi1');      //测试
+Route::get('/caidan','Youkao\Youkaocontroller@caidan');      //菜单
+Route::get('/glkc','Youkao\Youkaocontroller@glkc');      //管理课程
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Youkao;
 
 use App\Http\Controllers\Controller;
 use App\Model\WeixinUser;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -72,5 +73,36 @@ class Youkaocontroller extends Controller
     }
     public function ceshi1(){
         echo $this->Access_Token;
+    }
+    public function caidan(){
+        $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->Access_Token;
+        $url1='http://1905sunhao.comcto.com/glkc';
+        $view_url='https://open.weixin.qq.com/connect/oauth2/authorize?appid='.env('APPID').'&redirect_uri='.urlencode($url1).'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+        $data=[
+            'button'=>[
+                [
+                    'type'=>'click',
+                    'name'=>'查看课程',
+                    'key'=>'ckkc'
+                ],
+                [
+                    'type'=>'view',
+                    'name'=>'管理课程',
+                    'url'=>$view_url
+                ]
+            ]
+        ];
+
+
+        $body=json_encode($data,JSON_UNESCAPED_UNICODE);
+        $client=new Client();
+        $aaa=$client->request('POST',$url,[
+            'body'=>$body
+        ]);
+        echo $aaa->getBody();
+    }
+    public function glkc(){
+       $code=$_GET['code'];
+        echo $code;
     }
 }
