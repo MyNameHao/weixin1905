@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Youkao;
 
 use App\Http\Controllers\Controller;
+use App\Model\CourseModel;
+use App\Model\UserCourse;
 use App\Model\WeixinUser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -62,6 +64,29 @@ class Youkaocontroller extends Controller
                           </xml>';
                     echo $xmltext;
                 }
+            }elseif($xml_obj->Event=='CLICK'){
+                $userinfo=UserCourse::where('openid',$openid)->first();
+                if($userinfo){
+                    $userdata=$this->getuserinfo($openid);
+                    $text="您好，".$userdata['nickname']."同学，您当前的课程安排如下\n"."第一节:".$userinfo['course_1']."\n"."第二节:".$userinfo['course_2']."\n"."第三节:".$userinfo['course_3']."\n"."第四节:".$userinfo['course_4'];
+                    $xmltext='<xml>
+                            <ToUserName><![CDATA['.$openid.']]></ToUserName>
+                            <FromUserName><![CDATA['.$xml_obj->TouserName.']]></FromUserName>
+                            <CreateTime>'.time().'</CreateTime>
+                            <MsgType><![CDATA[text]]></MsgType>
+                            <Content><![CDATA['.$text.']]></Content>
+                          </xml>';
+                    echo $xmltext;
+                }else{
+                    $xmltext='<xml>
+                            <ToUserName><![CDATA['.$openid.']]></ToUserName>
+                            <FromUserName><![CDATA['.$xml_obj->TouserName.']]></FromUserName>
+                            <CreateTime>'.time().'</CreateTime>
+                            <MsgType><![CDATA[text]]></MsgType>
+                            <Content><![CDATA[请先选择课程。]]></Content>
+                          </xml>';
+                    echo $xmltext;
+                }
             }
         }
     }
@@ -76,8 +101,8 @@ class Youkaocontroller extends Controller
     }
     public function caidan(){
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->Access_Token;
-        $url1='http://1905sunhao.comcto.com/glkc';
-        $view_url='https://open.weixin.qq.com/connect/oauth2/authorize?appid='.env('APPID').'&redirect_uri='.urlencode($url1).'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+        $url1=urlencode('http://1905sunhao.comcto.com/glkc');
+//        $view_url='https://open.weixin.qq.com/connect/oauth2/authorize?appid='.env('APPID').'&redirect_uri='.urlencode($url1).'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
         $data=[
             'button'=>[
                 [
@@ -88,7 +113,7 @@ class Youkaocontroller extends Controller
                 [
                     'type'=>'view',
                     'name'=>'管理课程',
-                    'url'=>$view_url
+                    'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$url1.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
                 ]
             ]
         ];
@@ -103,6 +128,44 @@ class Youkaocontroller extends Controller
     }
     public function glkc(){
        $code=$_GET['code'];
-        echo $code;
+        $url='https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('APPID').'&secret='.env('APPSECRE').'&code='.$code.'&grant_type=authorization_code';
+        $array_token=json_encode(file_get_contents($url),true);
+        $access_token=$array_token['access_token'];
+        $openid=$array_token['openid'];
+        return ('/glkc2/'.$openid);
+    }
+    public function glkc2($openid){
+            echo $openid;
+        $courseinfo=UserCourse::where('openid',$openid)->first();
+        if($courseinfo){
+            return redirect('course/index/'.$openid);
+        }else{
+            return redirect('/course/add/'.$openid);
+        }
+    }
+    public function add($openid){
+        $course=CourseModel::get();
+        return view('course.add',['data'=>$course,'openid'=>$openid]);
+    }
+    public function create(){
+        $data=request()->all();
+        $id=UserCourse::insertGetId($data);
+        dd($id);
+    }
+    public function index($openid){
+        $courseinfo=UserCourse::where('openid',$openid)->first();
+        dd($courseinfo);
+        return view('course.index',['data'=>$courseinfo,'openid'=>$openid]);
+    }
+    public function update($openid){
+        $course=CourseModel::get();
+        $courseinfo=UserCourse::where('openid',$openid)->first();
+        return view('course.update',['data'=>$course,'openid'=>$openid,'courseinfo'=>$courseinfo]);
+
+    }
+    public function updo($openid){
+        $data=request()->all();
+            $res=UserCourse::where(['openid'=>$openid])->update($data);
+        dd($res);
     }
 }

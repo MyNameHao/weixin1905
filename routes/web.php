@@ -61,5 +61,12 @@ Route::post('/weixinurl','Youkao\Youkaocontroller@weixinurl');      //接受微�
 Route::get('/ceshi1','Youkao\Youkaocontroller@ceshi1');      //测试
 Route::get('/caidan','Youkao\Youkaocontroller@caidan');      //菜单
 Route::get('/glkc','Youkao\Youkaocontroller@glkc');      //管理课程
+Route::get('/glkc2/{openid}','Youkao\Youkaocontroller@glkc2');      //管理课程
+Route::get('/course/add/{openid}','Youkao\Youkaocontroller@add');      //管理课程
+Route::get('/course/index/{openid}','Youkao\Youkaocontroller@index');      //管理课程
+Route::get('/course/update/{openid}','Youkao\Youkaocontroller@update');      //管理课程
+Route::post('/course/create','Youkao\Youkaocontroller@create');      //管理课程
+Route::post('/course/updo/{openid}','Youkao\Youkaocontroller@updo');      //管理课程
+
 
 
