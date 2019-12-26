@@ -68,8 +68,12 @@ class TestController extends Controller
             //如果是视频消息将通过网址|https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID|和mediaid获取视频文件,将视频文件放到本地
             echo '视频消息';
         }elseif($xml_obj->MsgType=='image'){
-            //如果是图片消息将通过网址|https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID|和mediaid获取图片文件,将视频图片放到本地
-            echo '图片消息';
+            //文件下载实例代码
+            $mediaid= $xml_obj->MediaId;
+            $access_token='28_KMRnvsmnCcHwqkQ2fXCB_ipCR0TYbS2DjXAgJ3hv12ZXl1JdQ-DrUs3cR39glGxdeeNG3wgxtbY_9X0o9vNmlS8Xu8BaIguWAKCtEOT1XFIyQD0106GxBc00T53hvkrrRX3Mbvzvfs4rs0qbUDMgABAKTC';
+            $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$mediaid;
+            $imgname=time().'.jpeg';
+            file_put_contents($imgname,file_get_contents($url));
         }
     }
     public function wxqr(){
@@ -94,5 +98,9 @@ class TestController extends Controller
         $url1='https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($ticket);
             return redirect($url1);
 //        dd($json_str);
+    }
+    //节日首页
+    public function festival(){
+        $code=$_GET['code'];
     }
 }

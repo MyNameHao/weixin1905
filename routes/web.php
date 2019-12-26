@@ -36,7 +36,7 @@ Route::get('/fanyi','User\UserController@fanyi');
 
 //微信
 Route::get('/weixinurl','Wx\Weixin@weixinurl');
-Route::post('/weixinurl','Wx\Weixin@receiv');      //接受微信的推送事件
+//Route::post('/weixinurl','Wx\Weixin@receiv');      //接受微信的推送事件
 Route::get('/xmltest','Wx\Weixin@xmltest');      //接受微信的推送事件    
 Route::get('/ceshi','Wx\Weixin@ceshi');      //测试方法
 Route::get('/ceshi2','Wx\Weixin@ceshi2');      //测试方法
@@ -50,7 +50,9 @@ Route::get('/weather','Wx\Weixin@weather');
 Route::get('/qrcode','Wx\WxQRController@qrcode');
 
 //测试事件
-//Route::post('/weixinurl','test\TestController@test');      //接受微信的推送事件
-//Route::get('/wxqr','test\TestController@wxqr');      //接受微信的推送事件
+Route::post('/weixinurl','test\TestController@test');      //接受微信的推送事件
+Route::get('/wxqr','test\TestController@wxqr');      //接受微信的推送事件
+Route::get('/festival','test\TestController@festival');      //节日主页
+
 
 

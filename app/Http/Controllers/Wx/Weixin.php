@@ -317,6 +317,7 @@ class Weixin extends Controller
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
         $urlencode=urlEncode('http://1905sunhao.comcto.com/vote');
         $urlencode2=urlEncode('http://1905sunhao.comcto.com/code');
+        $urlencode3=urlEncode('http://1905sunhao.comcto.com/festival');
                             $meun=[
             'button'=>
                 [
@@ -334,9 +335,9 @@ class Weixin extends Controller
                         'name'=>'菜单',
                         'sub_button'=>[
                             [
-                                'type'=>'click',
-                                'name'=>'点个赞呗',
-                                'key'=>'dianzan'
+                                'type'=>'view',
+                                'name'=>'节日祝福',
+                                'url'=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4fdcb23b1ce7f2c6&redirect_uri='.$urlencode3.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect'
                             ],
                             [
                                 'type'=>'view',
