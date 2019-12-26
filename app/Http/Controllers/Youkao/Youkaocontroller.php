@@ -129,13 +129,12 @@ class Youkaocontroller extends Controller
     public function glkc(){
        $code=$_GET['code'];
         $url='https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('APPID').'&secret='.env('APPSECRE').'&code='.$code.'&grant_type=authorization_code';
-        $array_token=json_encode(file_get_contents($url),true);
+        $array_token=json_decode(file_get_contents($url),true);
 //        $access_token=$array_token['access_token'];
         $openid=$array_token['openid'];
         return ('/glkc2/'.$openid);
     }
     public function glkc2($openid){
-            echo $openid;
         $courseinfo=UserCourse::where('openid',$openid)->first();
         if($courseinfo){
             return redirect('course/index/'.$openid);
@@ -150,11 +149,9 @@ class Youkaocontroller extends Controller
     public function create(){
         $data=request()->all();
         $id=UserCourse::insertGetId($data);
-        dd($id);
     }
     public function index($openid){
         $courseinfo=UserCourse::where('openid',$openid)->first();
-        dd($courseinfo);
         return view('course.index',['data'=>$courseinfo,'openid'=>$openid]);
     }
     public function update($openid){
@@ -166,6 +163,5 @@ class Youkaocontroller extends Controller
     public function updo($openid){
         $data=request()->all();
             $res=UserCourse::where(['openid'=>$openid])->update($data);
-        dd($res);
     }
 }
